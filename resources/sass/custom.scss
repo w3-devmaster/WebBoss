@@ -1,0 +1,15 @@
+.my-shadow {
+    -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  -webkit-box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.2) ;
+  box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.2) ;
+}
+
+.my-hover:hover {
+  -webkit-box-shadow: 0 0 4px 0 rgba(0,0,0,0.2) ;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.2) ;
+}
+
