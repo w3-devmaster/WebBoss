@@ -61,17 +61,33 @@
             </div>
         </div>
         <div class="col-12">
-            <hr class="border-primary border-top">
+            <hr class="border-primary border-top mt-0">
+            <div class="row">
+                <div class="col-12 text-primary f-22 text-center">
+                    <ion-icon name="library"></ion-icon> หมวดหมู่สินค้า
+                </div>
+                <div class="col-12">
+                    <div class="owl-carousel owl-theme owl-loaded owl-drag">
+                        @for ($i = 1; $i <= 12; $i++)
+                            <div class="my-hover border-info rounded border p-2 text-center">
+                                <img src="https://placehold.jp/0068b8/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto" style="cursor: pointer;" alt="...">
+                                <span>หนังสือเรียน</span>
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+            <hr class="border-primary border-top mt-0">
         </div>
         <div class="col-12 mb-3">
             <h4 class="border-bottom border-info">
-                <ion-icon name="gift" class="text-warning me-2"></ion-icon>สินค้าลดราคา
+                <i class="fas fa-history text-warning me-2"></i> สินค้าลดราคา
             </h4>
             <div class="row m-0">
                 @for ($i = 1; $i <= 12; $i++)
-                    <div data-aos="fade-up" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
+                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $i }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img src="https://placehold.jp/80c8ff/ffffff/150x150.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
+                            <img src="https://placehold.jp/80c8ff/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
                             <span>ชื่อสินค้า</span><br>
                             <span class="text-black-50">ราคาปกติ : </span>
                             <span class="text-black-50" style="text-decoration:line-through rgb(255, 100, 100);">30 ฿</span><br>
@@ -93,13 +109,13 @@
         </div>
         <div class="col-12 mb-3">
             <h4 class="border-bottom border-info">
-                <ion-icon name="pricetags" class="text-primary me-2"></ion-icon> สินค้าขายดี
+                <i class="fab fa-hotjar text-danger me-2"></i> สินค้าขายดี
             </h4>
             <div class="row m-0">
                 @for ($i = 1; $i <= 12; $i++)
-                    <div data-aos="fade-up" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
+                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $i }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img src="https://placehold.jp/8095ff/ffffff/150x150.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
+                            <img src="https://placehold.jp/8095ff/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
                             <span>ชื่อสินค้า</span><br>
                             <span class="text-black-50">ราคาปกติ : </span>
                             <span class="text-black-50" style="text-decoration:line-through rgb(255, 100, 100);">30 ฿</span><br>

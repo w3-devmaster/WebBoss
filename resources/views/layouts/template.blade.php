@@ -25,7 +25,7 @@
 
 <body>
     @include('component.navbar')
-    <main class="py-4">
+    <main class="py-4" style="background-image: url({{ Storage::url('default-images/top-bg.png') }}); background-repeat: repeat-x;background-position: center top;">
         @yield('main-content')
     </main>
     @include('component.footer')
