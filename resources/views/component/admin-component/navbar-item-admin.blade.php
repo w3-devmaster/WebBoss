@@ -1,11 +1,11 @@
 <li class="nav-item">
-    <a href="#" class="nav-link hvr-underline-from-left d-block active">
+    <a href="{{ route('admin.index') }}" class="nav-link hvr-underline-from-left d-block active">
         <i class="bi bi-house-door me-2"></i>
         หน้าแรก
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link hvr-underline-from-left d-block text-white">
+    <a href="{{ route('admin.dashboard') }}" class="nav-link hvr-underline-from-left d-block text-white">
         <i class="bi bi-card-list me-2"></i>
         สรุปบัญชี
     </a>

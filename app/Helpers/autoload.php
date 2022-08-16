@@ -1,10 +1,10 @@
 <?php
 
-$files = glob( __DIR__ . "/*.Class.php" );
+$files = glob( __DIR__ . "/*.func.php" );
 foreach ( $files as $file )
 {
     $filename = (string) $file;
-    if ( strpos( $filename, '.Class.php' ) !== false )
+    if ( strpos( $filename, '.func.php' ) !== false )
     {
         require_once $filename;
     }

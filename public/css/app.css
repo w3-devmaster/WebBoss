@@ -11111,10 +11111,16 @@ textarea.form-control-lg {
   width: 280px;
 }
 
-.admin-content {
-  width: calc(100% - 280px);
+@media only screen and (max-width: 768px) {
+  .admin-content {
+    width: 100%;
+  }
 }
-
+@media only screen and (min-width: 768px) {
+  .admin-content {
+    width: calc(100% - 280px);
+  }
+}
 .clearfix {
   clear: both;
 }

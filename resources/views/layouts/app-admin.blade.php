@@ -24,20 +24,12 @@
 </head>
 
 <body>
-    <div class="d-block d-md-none">
-        @include('component.navbar-admin')
-        <div class="container-fluid p-0">
-            <div class="row m-0">
-                <div class="col-12">
-                    @yield('content')
-                </div>
-            </div>
-            @include('component.footer')
-        </div>
-    </div>
 
-    <div class="container-fluid d-none d-md-block p-0">
-        <div class="admin-sidebar float-start p-0">
+    <div class="container-fluid p-0">
+        <div class="admin-sidebar float-start d-none d-md-block p-0">
+            @include('component.navbar-admin')
+        </div>
+        <div class="d-block d-md-none">
             @include('component.navbar-admin')
         </div>
         <div class="admin-content float-start p-0">
@@ -49,7 +41,6 @@
             @include('component.footer')
         </div>
     </div>
-
 
     @include('component.script')
 </body>

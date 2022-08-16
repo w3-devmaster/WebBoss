@@ -48,16 +48,19 @@
                         <a class="nav-link hvr-underline-from-left {{ request()->is('/product-list') ? 'active' : '' }} px-3" href="#">สินค้าทั้งหมด</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/how-to-buy') ? 'active' : '' }} px-3" href="#">วิธีการสั่งซื้อ</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('/how-to-buy') ? 'active' : '' }} px-3" href="{{ route('how-to-buy') }}">วิธีการสั่งซื้อ</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/payment') ? 'active' : '' }} px-3" href="#">แจ้งชำระเงิน</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('/how-to-payment') ? 'active' : '' }} px-3" href="{{ route('how-to-payment') }}">วิธีการแจ้งชำระเงิน</a>
+                    </li>
+                    {{-- <li class="nav-item text-md-bold mt-1">
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('/payment') ? 'active' : '' }} px-3" href="{{ route('payment') }}">แจ้งชำระเงิน</a>
+                    </li> --}}
+                    <li class="nav-item text-md-bold mt-1">
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('/about') ? 'active' : '' }} px-3" href="{{ route('about') }}">เกี่ยวกับเรา</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/about') ? 'active' : '' }} px-3" href="#">เกี่ยวกับเรา</a>
-                    </li>
-                    <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/contact') ? 'active' : '' }} px-3" href="#">ติดต่อเรา</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('/contact') ? 'active' : '' }} px-3" href="{{ route('contact') }}">ติดต่อเรา</a>
                     </li>
                 </ul>
             </div>

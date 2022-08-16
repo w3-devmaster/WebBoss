@@ -94,7 +94,7 @@
                             <div class="col-md-8 ps-2">
                                 <div class="card-body">
                                     <h6 class="card-title f-14 text-md-start text-center">ธนาคารกสิกรไทย</h6>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : 1-234-56789-0</p>
+                                    <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : {{ textFormat('1234567890', '_-___-_____-_') }}</p>
                                     <p class="card-text f-12 text-md-start mb-0 text-center">ชื่อบัญชี นายร่ำรวย เงินทอง</p>
                                 </div>
                             </div>
@@ -135,6 +135,15 @@
                 <div class="border-dark rounded border p-3">
                     <h6>จัดการหน้าเพจสำคัญ</h6>
                     <hr class="border-top border-secondary">
+                    <ul class="list-unstyled">
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.how-to-buy') }}">วิธีการสั่งซื้อ</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.how-to-payment') }}">วิธีแจ้งชำระเงิน</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.about') }}">เกี่ยวกับเรา</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.contact') }}">ติดต่อเรา</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.privacy-policy') }}">นโยบายความเป็นส่วนตัว</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.refund-policy') }}">นโยบายการคืนเงิน</a></li>
+                        <li><a class="btn btn-link" href="{{ route('admin.setting.product-policy') }}">นโยบายการคืนสินค้า</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
