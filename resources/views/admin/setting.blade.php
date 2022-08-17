@@ -84,50 +84,26 @@
             </div>
             <div class="col-md-6 col-12 mb-3">
                 <div class="border-dark rounded border p-3">
-                    <h6>บัญชีธนาคาร <a href="" class="float-end text-success"><i class="fa fa-cog"></i> จัดการ</a></h6>
+                    <h6>บัญชีธนาคาร <a href="{{ route('admin.setting.bank') }}" class="float-end text-success"><i class="fa fa-cog"></i> จัดการ</a></h6>
                     <hr class="border-top border-secondary">
-                    <div class="card float-sm-start me-sm-3 float-none mx-auto mb-3" style="max-width: 260px;">
-                        <div class="row g-0">
-                            <div class="col-md-4 pt-md-0 pt-3">
-                                <img style="max-width:100px;" src="https://www.blognone.com/sites/default/files/styles/large/public/topics-images/kbank.png?itok=2WwlJ3N2" class="img-fluid d-block rounded-start mx-auto" alt="...">
-                            </div>
-                            <div class="col-md-8 ps-2">
-                                <div class="card-body">
-                                    <h6 class="card-title f-14 text-md-start text-center">ธนาคารกสิกรไทย</h6>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : {{ textFormat('1234567890', '_-___-_____-_') }}</p>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">ชื่อบัญชี นายร่ำรวย เงินทอง</p>
+                    @if ($setting->bank != null)
+                        @foreach (json_decode($setting->bank, true) as $key => $item)
+                            <div class="card float-sm-start me-sm-3 float-none mx-auto mb-3" style="max-width: 260px;">
+                                <div class="row g-0">
+                                    <div class="col-md-4 pt-md-0 pt-3">
+                                        <img style="max-width:100px;" src="{{ $item['image'] }}" class="img-fluid d-block rounded-start mx-auto" alt="...">
+                                    </div>
+                                    <div class="col-md-8 ps-2">
+                                        <div class="card-body">
+                                            <h6 class="card-title f-14 text-md-start text-center">{{ $item['bank'] }}</h6>
+                                            <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : {{ textFormat($item['account'], '_-___-_____-_') }}</p>
+                                            <p class="card-text f-12 text-md-start mb-0 text-center">ชื่อบัญชี {{ $item['name'] }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card float-sm-start me-sm-3 float-none mx-auto mb-3" style="max-width: 260px;">
-                        <div class="row g-0">
-                            <div class="col-md-4 pt-md-0 pt-3">
-                                <img style="max-width:100px;" src="https://mangmaoclub.com/wp-content/uploads/2019/11/SCB-Logo-Rectangle-V2.jpg" class="img-fluid d-block rounded-start mx-auto" alt="...">
-                            </div>
-                            <div class="col-md-8 ps-2">
-                                <div class="card-body">
-                                    <h6 class="card-title f-14 text-md-start text-center">ธนาคารไทยพาณิชย์</h6>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : 1-234-56789-0</p>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">ชื่อบัญชี นายร่ำรวย เงินทอง</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card float-sm-start me-sm-3 float-none mx-auto mb-3" style="max-width: 260px;">
-                        <div class="row g-0">
-                            <div class="col-md-4 pt-md-0 pt-3">
-                                <img style="max-width:100px;" src="https://media.thaigov.go.th/uploads/thumbnail/news/2019/07/IMG_21633_20190718141213000000.jpg" class="img-fluid d-block rounded-start mx-auto" alt="...">
-                            </div>
-                            <div class="col-md-8 ps-2">
-                                <div class="card-body">
-                                    <h6 class="card-title f-14 text-md-start text-center">ธนาคารกรุงไทย</h6>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">เลขที่บัญชี : 1-234-56789-0</p>
-                                    <p class="card-text f-12 text-md-start mb-0 text-center">ชื่อบัญชี นายร่ำรวย เงินทอง</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endif
                     <div class="clearfix"></div>
                 </div>
             </div>

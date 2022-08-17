@@ -60,7 +60,63 @@ class SettingController extends Controller
 
     public function bank_exec( Request $request )
     {
+        $request->validate( [
+            'image'   => 'required|url',
+            'bank'    => 'required|string',
+            'account' => 'required|numeric',
+            'name'    => 'required|string',
+        ] );
 
+        if ( !Setting::whereId( 1 )->exists() )
+        {
+            Setting::create();
+        }
+
+        $setting = Setting::find( 1 );
+
+        $data = [
+            'image'   => $request->image,
+            'bank'    => $request->bank,
+            'account' => $request->account,
+            'name'    => $request->name,
+        ];
+
+        if ( $setting->bank == null )
+        {
+            $datas = [];
+        }
+        else
+        {
+            $datas = array_combine( range( 1, count( json_decode( $setting->bank, true ) ) ), array_values( json_decode( $setting->bank, true ) ) );
+        }
+
+        $cnt = count( $datas ) + 1;
+
+        $datas[$cnt] = $data;
+
+        $setting->bank = json_encode( $datas );
+
+        // dd( $setting->bank );
+        $setting->save();
+
+        return redirect()->back()->with( 'success', 'บันทึกข้อมูลเสร็จสิ้น' );
+    }
+
+    public function bank_delete( Request $request )
+    {
+
+        $setting = Setting::find( 1 );
+        $datas   = json_decode( $setting->bank, true );
+
+        unset( $datas[$request->key] );
+
+        $data = array_combine( range( 1, count( $datas ) ), array_values( $datas ) );
+
+        $setting->bank = json_encode( $data );
+
+        $setting->save();
+
+        return redirect()->back()->with( 'success', 'ลบข้อมูลเสร็จสิ้น' );
     }
 
     // How to buy

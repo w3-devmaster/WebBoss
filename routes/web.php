@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
@@ -53,12 +54,14 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::post( '/changepassword-take', [AdminController::class, 'changepassword'] )->name( 'changepassword-take' );
         Route::get( '/setting', [SettingController::class, 'index'] )->name( 'setting' );
         Route::post( '/setting', [SettingController::class, 'save_setting'] )->name( 'save-setting' );
+        Route::resource( '/category', CategoryController::class, ['name' => 'category'] );
 
         Route::prefix( 'setting' )->name( 'setting.' )->group( function ()
         {
             // Bank Account
             Route::get( '/bank', [SettingController::class, 'bank'] )->name( 'bank' );
             Route::post( '/bank', [SettingController::class, 'bank_exec'] )->name( 'bank-exec' );
+            Route::delete( '/bank', [SettingController::class, 'bank_delete'] )->name( 'bank-delete' );
 
             // Pages
             Route::get( '/how-to-buy', [SettingController::class, 'how_to_buy'] )->name( 'how-to-buy' );
