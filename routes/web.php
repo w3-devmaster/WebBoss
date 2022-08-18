@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::get( '/setting', [SettingController::class, 'index'] )->name( 'setting' );
         Route::post( '/setting', [SettingController::class, 'save_setting'] )->name( 'save-setting' );
         Route::resource( '/category', CategoryController::class, ['name' => 'category'] );
+        Route::resource( '/product', ProductController::class, ['name' => 'product'] );
 
         Route::prefix( 'setting' )->name( 'setting.' )->group( function ()
         {

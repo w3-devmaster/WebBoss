@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -97,7 +98,9 @@ class CategoryController extends Controller
      */
     public function show( Category $category )
     {
-        return view( 'admin.pages.category.show', compact( 'category' ) );
+        $cat = Category::all();
+
+        return view( 'admin.pages.category.show', compact( 'category', 'cat' ) );
     }
 
     /**
@@ -120,7 +123,36 @@ class CategoryController extends Controller
      */
     public function update( UpdateCategoryRequest $request, Category $category )
     {
-        //
+        if ( $request->parent == 0 )
+        {
+            $level = 0;
+        }
+        else
+        {
+            $level = Category::find( $request->parent )->level + 1;
+        }
+
+        if ( $level > 3 )
+        {
+            return redirect()->back()->with( 'fail', 'ไม่ควรซ้อนหมวดหมู่เกิน 3 ระดับ' );
+        }
+
+        if ( $request->hasFile( 'img' ) )
+        {
+            $img  = $request->file( 'img' );
+            $path = $img->storeAs( 'public/category', md5( rand() . uniqid() ) . '-' . $img->getClientOriginalName() );
+            Storage::delete( $category->img );
+
+            $category->img = $path;
+        }
+
+        $category->name   = $request->name;
+        $category->parent = $request->parent;
+        $category->level  = $level;
+        $category->save();
+
+        return redirect()->back()->with( 'success', 'บันทึกข้อมูลเสร็จสิ้น' );
+
     }
 
     /**

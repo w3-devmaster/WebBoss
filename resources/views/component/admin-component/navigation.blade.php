@@ -7,7 +7,21 @@
             @if (!$loop->last)
                 <li class="breadcrumb-item"><a href="{{ route($breadcumb['routes'][$key]) }}">{{ getSeqments($segment) }}</a></li>
             @else
-                <li class="breadcrumb-item active" aria-current="page">{{ getSeqments($segment) }}</li>
+                @if (request()->is('admin/category/*'))
+                    @if (!request()->is('admin/category/create'))
+                        @foreach (getParentSeqments($category->id ?? null) as $key => $item)
+                            @if ($loop->last)
+                                <li class="breadcrumb-item active" aria-current="page">{{ $item }}</li>
+                            @else
+                                <li class="breadcrumb-item"><a href="{{ route('admin.category.show', $key) }}">{{ $item }}</a></li>
+                            @endif
+                        @endforeach
+                    @else
+                        <li class="breadcrumb-item active" aria-current="page">{{ getSeqments($segment) }}</li>
+                    @endif
+                @else
+                    <li class="breadcrumb-item active" aria-current="page">{{ getSeqments($segment) }}</li>
+                @endif
             @endif
         @endforeach
     </ol>

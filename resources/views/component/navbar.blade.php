@@ -27,17 +27,70 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-lg-0 f-16 mb-2">
                     <li class="nav-item dropdown border-end border-secondary f-20 text-bold">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <ion-icon name="library"></ion-icon> หมวดหมู่สินค้า
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            @foreach ($menu_category as $menu)
+                                @php
+                                    $child = getCategoryChildByParent($menu->id);
+                                @endphp
+                                @if ($child)
+                                    <li><a class="dropdown-item" href="#">{{ $menu->name }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                        <ul class="dropdown-menu dropdown-submenu">
+                                            @foreach ($child as $a)
+                                                @if ($a['child'])
+                                                    <li><a class="dropdown-item" href="#">{{ $a['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                        <ul class="dropdown-menu dropdown-submenu">
+                                                            @foreach (getCategoryChildByParent($a['id']) as $b)
+                                                                @if ($b['child'])
+                                                                    <li><a class="dropdown-item" href="#">{{ $b['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                                        <ul class="dropdown-menu dropdown-submenu">
+                                                                            @foreach (getCategoryChildByParent($b['id']) as $c)
+                                                                                @if ($c['child'])
+                                                                                    <li><a class="dropdown-item" href="#">{{ $c['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a></li>
+                                                                                @else
+                                                                                    <li><a class="dropdown-item" href="#">{{ $c['name'] }}</a></li>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    </li>
+                                                                @else
+                                                                    <li><a class="dropdown-item" href="#">{{ $b['name'] }}</a></li>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+                                                @else
+                                                    <li><a class="dropdown-item" href="#">{{ $a['name'] }}</a></li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                @else
+                                    <li><a class="dropdown-item" href="#">{{ $menu->name }}</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        {{-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <ion-icon name="library"></ion-icon> หมวดหมู่สินค้า
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                            @foreach ($menu_category as $menu)
+                                <li>
+                                    <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{ $menu->name }}</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            @endforeach
+                        </ul> --}}
                     </li>
                     <li class="nav-item text-md-bold ms-1 mt-1">
                         <a class="nav-link hvr-underline-from-left {{ request()->is('/') ? 'active' : '' }} px-3" aria-current="page" href="{{ route('index') }}">

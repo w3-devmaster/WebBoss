@@ -2,6 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 
+if ( !function_exists( 'getSeqments' ) )
+{
+    function getSeqments( $seqment )
+    {
+        $seqments = [
+            'admin'          => 'หน้าแรก',
+            'dashboard'      => 'สรุปบัญชี',
+            'changepassword' => 'เปลี่ยนรหัสผ่าน',
+            'setting'        => 'ตั้งค่าระบบ',
+            'bank'           => 'บัญชีธนาคาร',
+            'how-to-buy'     => 'วิธีการสั่งซื้อ',
+            'how-to-payment' => 'วิธีแจ้งชำระเงิน',
+            'about'          => 'เกี่ยวกับเรา',
+            'contact'        => 'ติดต่อเรา',
+            'privacy-policy' => 'นโยบายความเป็นส่วนตัว',
+            'refund-policy'  => 'นโยบายการคืนเงิน',
+            'product-policy' => 'นโยบายการคืนสินค้า',
+            /// Product
+            'product'        => 'สินค้า',
+            'category'       => 'หมวดหมู่สินค้า',
+            'create'         => 'เพิ่ม',
+        ];
+
+        return $seqments[$seqment] ?? '...';
+    }
+}
+
 if ( !function_exists( 'getAdminSeqmentData' ) )
 {
     function getAdminSeqmentData( $seqments )
@@ -41,31 +68,6 @@ if ( !function_exists( 'getAdminSeqmentData' ) )
         }
 
         return ['seqments' => $seqments, 'routes' => $routes];
-    }
-}
-if ( !function_exists( 'getSeqments' ) )
-{
-    function getSeqments( $seqment )
-    {
-        $seqments = [
-            'admin'          => 'หน้าแรก',
-            'dashboard'      => 'สรุปบัญชี',
-            'changepassword' => 'เปลี่ยนรหัสผ่าน',
-            'setting'        => 'ตั้งค่าระบบ',
-            'bank'           => 'บัญชีธนาคาร',
-            'how-to-buy'     => 'วิธีการสั่งซื้อ',
-            'how-to-payment' => 'วิธีแจ้งชำระเงิน',
-            'about'          => 'เกี่ยวกับเรา',
-            'contact'        => 'ติดต่อเรา',
-            'privacy-policy' => 'นโยบายความเป็นส่วนตัว',
-            'refund-policy'  => 'นโยบายการคืนเงิน',
-            'product-policy' => 'นโยบายการคืนสินค้า',
-            /// Product
-            'category'       => 'หมวดหมู่สินค้า',
-            'create'         => 'เพิ่มหมวดหมู่สินค้า',
-        ];
-
-        return $seqments[$seqment] ?? '...';
     }
 }
 

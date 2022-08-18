@@ -14,7 +14,7 @@
                 @if (Session::get('fail'))
                     <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                 @endif
-                {!! Form::open(['route' => 'admin.category.store', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.product.store', 'files' => true]) !!}
                 <div class="form-group mb-3">
                     <label for="img">ภาพหัวข้อหมวดหมู่</label>
                     <input name="img" type="file" class="form-control @error('img') is-invalid @enderror">

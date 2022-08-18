@@ -8,6 +8,9 @@
         loop: true,
         nav: false,
         margin: 10,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        autoplayHoverPause: true,
         responsive: {
             0: {
                 items: 3
