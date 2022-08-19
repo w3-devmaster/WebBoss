@@ -36,6 +36,11 @@ if ( !function_exists( 'getParentForSelect' ) )
 {
     function getParentForSelect( $id )
     {
+        if ( $id === null || $id === 0 )
+        {
+            return 'หมวดหมู่หลัก';
+        }
+
         $name = '';
 
         $item = [];
@@ -76,7 +81,7 @@ if ( !function_exists( 'getParentSeqments' ) )
 {
     function getParentSeqments( $id = null )
     {
-        if ( $id == null )
+        if ( $id === null || $id === 0 )
         {
             return [];
         }

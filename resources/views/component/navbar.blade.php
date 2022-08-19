@@ -36,45 +36,40 @@
                                     $child = getCategoryChildByParent($menu->id);
                                 @endphp
                                 @if ($child)
-                                    <li><a class="dropdown-item" href="#">{{ $menu->name }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }} <i class="fa fa-share ms-5 text-dark"></i></a>
                                         <ul class="dropdown-menu dropdown-submenu">
                                             @foreach ($child as $a)
                                                 @if ($a['child'])
-                                                    <li><a class="dropdown-item" href="#">{{ $a['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
                                                         <ul class="dropdown-menu dropdown-submenu">
                                                             @foreach (getCategoryChildByParent($a['id']) as $b)
                                                                 @if ($b['child'])
-                                                                    <li><a class="dropdown-item" href="#">{{ $b['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
                                                                         <ul class="dropdown-menu dropdown-submenu">
                                                                             @foreach (getCategoryChildByParent($b['id']) as $c)
                                                                                 @if ($c['child'])
-                                                                                    <li><a class="dropdown-item" href="#">{{ $c['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a></li>
+                                                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                                                    </li>
                                                                                 @else
-                                                                                    <li><a class="dropdown-item" href="#">{{ $c['name'] }}</a></li>
+                                                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }}</a></li>
                                                                                 @endif
                                                                             @endforeach
                                                                         </ul>
                                                                     </li>
                                                                 @else
-                                                                    <li><a class="dropdown-item" href="#">{{ $b['name'] }}</a></li>
+                                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }}</a></li>
                                                                 @endif
                                                             @endforeach
                                                         </ul>
                                                     </li>
                                                 @else
-                                                    <li><a class="dropdown-item" href="#">{{ $a['name'] }}</a></li>
+                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }}</a></li>
                                                 @endif
                                             @endforeach
                                         </ul>
                                     </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
                                 @else
-                                    <li><a class="dropdown-item" href="#">{{ $menu->name }}</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
+                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }}</a></li>
                                 @endif
                             @endforeach
                         </ul>

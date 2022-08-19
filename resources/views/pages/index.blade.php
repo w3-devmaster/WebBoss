@@ -66,14 +66,18 @@
                 <div class="col-12 text-primary f-22 text-center">
                     <ion-icon name="library"></ion-icon> หมวดหมู่สินค้า
                 </div>
-                <div class="col-12">
+                <div class="col-12 mb-3">
                     <div class="owl-carousel owl-theme owl-loaded owl-drag">
-                        @for ($i = 1; $i <= 12; $i++)
-                            <div class="my-hover border-info rounded border p-2 text-center">
-                                <img src="https://placehold.jp/0068b8/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto" style="cursor: pointer;" alt="...">
-                                <span>หนังสือเรียน</span>
+                        @foreach ($main_category as $item)
+                            <div>
+                                <div class="my-hover border-info rounded border p-2 text-center" style="width: 150px;height:150px;">
+                                    <img style="width: 120px;height:120px;" src="{{ Storage::url($item->img) }}" class="img-fluid d-block mx-auto" style="cursor: pointer;" alt="...">
+                                </div>
+                                <div class="text-center">
+                                    <span>{{ $item->name }}</span>
+                                </div>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -84,22 +88,28 @@
                 <i class="fas fa-history text-warning me-2"></i> สินค้าลดราคา
             </h4>
             <div class="row m-0">
-                @for ($i = 1; $i <= 12; $i++)
-                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $i }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
+                @foreach ($product_sale as $item)
+                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $loop->iteration }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1" style="cursor: pointer;">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img src="https://placehold.jp/80c8ff/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
-                            <span>ชื่อสินค้า</span><br>
-                            <span class="text-black-50">ราคาปกติ : </span>
-                            <span class="text-black-50" style="text-decoration:line-through rgb(255, 100, 100);">30 ฿</span><br>
-                            <span>ราคา : </span>
-                            <span class="text-success">20 ฿</span><br>
+                            <img style="width: 100px;height:100px;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="...">
+                            <span>{{ $item->product_name }}</span><br>
+                            <span class="{{ $item->discount > 0 ? 'text-dark' : '' }}">{{ $item->discount > 0 ? 'ราคาปกติ' : 'ราคา' }} : </span>
+                            <span class="{{ $item->discount > 0 ? 'text-dark' : 'text-success' }}" style="{{ $item->discount > 0 ? 'text-decoration: line-through rgb(255, 100, 100);;' : '' }}">{{ number_format($item->price, 2) }} ฿</span><br>
+                            @if ($item->discount == 1)
+                                <span>ราคา : </span>
+                                <span class="text-success">{{ number_format($item->price - $item->dis_price, 2) }} ฿</span><br>
+                            @elseif($item->discount == 2)
+                                <span>ราคา : </span>
+                                <span class="text-success">{{ number_format($item->price - ($item->price * $item->dis_price) / 100, 2) }} ฿</span><br>
+                            @endif
+                            <span>ขายแล้ว : {{ number_format($item->buy) }}</span><br>
                             <button class="btn btn-primary btn-sm text-light px-1 py-0">
                                 <ion-icon name="cart-outline"></ion-icon>
                                 หยิบใส่ตระกร้า
                             </button>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
             <p class="border-top border-info mb-0 text-center">
                 <a class="btn btn-link text-primary f-12" href="">
@@ -112,22 +122,28 @@
                 <i class="fab fa-hotjar text-danger me-2"></i> สินค้าขายดี
             </h4>
             <div class="row m-0">
-                @for ($i = 1; $i <= 12; $i++)
-                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $i }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
+                @foreach ($product_hot as $item)
+                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $loop->iteration }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img src="https://placehold.jp/8095ff/ffffff/500x500.png" class="img-fluid w-100 d-block mx-auto mb-1" style="cursor: pointer;" alt="...">
-                            <span>ชื่อสินค้า</span><br>
-                            <span class="text-black-50">ราคาปกติ : </span>
-                            <span class="text-black-50" style="text-decoration:line-through rgb(255, 100, 100);">30 ฿</span><br>
-                            <span>ราคา : </span>
-                            <span class="text-success">20 ฿</span><br>
+                            <img style="width: 100px;height:100px;cursor: pointer;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="..." onclick="window.location.href='{{ $item->id }}'">
+                            <span>{{ $item->product_name }}</span><br>
+                            <span class="{{ $item->discount > 0 ? 'text-dark' : '' }}">{{ $item->discount > 0 ? 'ราคาปกติ' : 'ราคา' }} : </span>
+                            <span class="{{ $item->discount > 0 ? 'text-dark' : 'text-success' }}" style="{{ $item->discount > 0 ? 'text-decoration: line-through rgb(255, 100, 100);;' : '' }}">{{ number_format($item->price, 2) }} ฿</span><br>
+                            @if ($item->discount == 1)
+                                <span>ราคา : </span>
+                                <span class="text-success">{{ number_format($item->price - $item->dis_price, 2) }} ฿</span><br>
+                            @elseif($item->discount == 2)
+                                <span>ราคา : </span>
+                                <span class="text-success">{{ number_format($item->price - ($item->price * $item->dis_price) / 100, 2) }} ฿</span><br>
+                            @endif
+                            <span>ขายแล้ว : {{ number_format($item->buy) }}</span><br>
                             <button class="btn btn-primary btn-sm text-light px-1 py-0">
                                 <ion-icon name="cart-outline"></ion-icon>
                                 หยิบใส่ตระกร้า
                             </button>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
             <p class="border-top border-info mb-0 text-center">
                 <a class="btn btn-link text-primary f-12" href="">

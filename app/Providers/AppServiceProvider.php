@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\Setting;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+        Schema::defaultStringLength( 191 );
+
         if ( Schema::hasTable( 'settings' ) )
         {
             $setting = Setting::find( 1 );

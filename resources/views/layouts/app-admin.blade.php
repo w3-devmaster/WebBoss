@@ -34,7 +34,7 @@
         </div>
         <div class="admin-content float-start p-0">
             <div class="row m-0">
-                <div class="col-12 ps-0 text-secondary">
+                <div class="col-12 ps-0 text-secondary vh-100 overflow-auto">
                     @yield('content')
                 </div>
             </div>

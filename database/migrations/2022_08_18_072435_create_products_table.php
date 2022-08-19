@@ -16,11 +16,12 @@ class CreateProductsTable extends Migration
         Schema::create( 'products', function ( Blueprint $table )
         {
             $table->id();
-            $table->string( 'code', 10 );
+            $table->string( 'code', 10 )->unique();
             $table->string( 'product_name' );
             $table->longText( 'product_details' );
+            $table->string( 'color' )->nullable();
             $table->integer( 'category' );
-            $table->bigInteger( 'amont' )->default( 0 );
+            $table->bigInteger( 'amount' )->default( 0 );
             $table->float( 'price', 11, 2 )->default( 0 );
             $table->tinyInteger( 'discount' )->dafault( 0 );
             $table->float( 'dis_price', 11, 2 )->default( 0 );

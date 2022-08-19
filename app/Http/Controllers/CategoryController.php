@@ -163,6 +163,9 @@ class CategoryController extends Controller
      */
     public function destroy( Category $category )
     {
-        //
+        Storage::delete( $category->img );
+        $category->delete();
+
+        return redirect()->route( 'admin.category.index' )->with( 'success', 'ลบข้อมูลเสร็จสิ้น' );
     }
 }
