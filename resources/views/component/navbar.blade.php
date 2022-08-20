@@ -36,40 +36,42 @@
                                     $child = getCategoryChildByParent($menu->id);
                                 @endphp
                                 @if ($child)
-                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                    <li><a class="dropdown-item" href="{{ route('category', $menu->id) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }} <i class="fa fa-share ms-5 text-dark"></i></a>
                                         <ul class="dropdown-menu dropdown-submenu">
                                             @foreach ($child as $a)
                                                 @if ($a['child'])
-                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                    <li><a class="dropdown-item" href="{{ route('category', $a['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
                                                         <ul class="dropdown-menu dropdown-submenu">
                                                             @foreach (getCategoryChildByParent($a['id']) as $b)
                                                                 @if ($b['child'])
-                                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                                    <li><a class="dropdown-item" href="{{ route('category', $b['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }} <i
+                                                                                class="fa fa-share ms-5 text-dark"></i></a>
                                                                         <ul class="dropdown-menu dropdown-submenu">
                                                                             @foreach (getCategoryChildByParent($b['id']) as $c)
                                                                                 @if ($c['child'])
-                                                                                    <li><a class="dropdown-item" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }} <i class="fa fa-share ms-5 text-dark"></i></a>
+                                                                                    <li><a class="dropdown-item" href="{{ route('category', $c['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }} <i
+                                                                                                class="fa fa-share ms-5 text-dark"></i></a>
                                                                                     </li>
                                                                                 @else
-                                                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }}</a></li>
+                                                                                    <li><a class="dropdown-item pe-5" href="{{ route('category', $c['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($c['img']) }}" alt="">{{ $c['name'] }}</a></li>
                                                                                 @endif
                                                                             @endforeach
                                                                         </ul>
                                                                     </li>
                                                                 @else
-                                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }}</a></li>
+                                                                    <li><a class="dropdown-item pe-5" href="{{ route('category', $b['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($b['img']) }}" alt="">{{ $b['name'] }}</a></li>
                                                                 @endif
                                                             @endforeach
                                                         </ul>
                                                     </li>
                                                 @else
-                                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }}</a></li>
+                                                    <li><a class="dropdown-item pe-5" href="{{ route('category', $a['id']) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($a['img']) }}" alt="">{{ $a['name'] }}</a></li>
                                                 @endif
                                             @endforeach
                                         </ul>
                                     </li>
                                 @else
-                                    <li><a class="dropdown-item pe-5" href="#"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }}</a></li>
+                                    <li><a class="dropdown-item pe-5" href="{{ route('category', $menu->id) }}"><img class="me-3" style="width: 50px;height:50px;" src="{{ Storage::url($menu->img) }}" alt="">{{ $menu->name }}</a></li>
                                 @endif
                             @endforeach
                         </ul>
@@ -93,22 +95,22 @@
                         </a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/product-list') ? 'active' : '' }} px-3" href="#">สินค้าทั้งหมด</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('product*') ? 'active' : '' }} px-3" href="{{ route('product') }}">สินค้าทั้งหมด</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/how-to-buy') ? 'active' : '' }} px-3" href="{{ route('how-to-buy') }}">วิธีการสั่งซื้อ</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('how-to-buy') ? 'active' : '' }} px-3" href="{{ route('how-to-buy') }}">วิธีการสั่งซื้อ</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/how-to-payment') ? 'active' : '' }} px-3" href="{{ route('how-to-payment') }}">วิธีการแจ้งชำระเงิน</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('how-to-payment') ? 'active' : '' }} px-3" href="{{ route('how-to-payment') }}">วิธีการแจ้งชำระเงิน</a>
                     </li>
                     {{-- <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/payment') ? 'active' : '' }} px-3" href="{{ route('payment') }}">แจ้งชำระเงิน</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('payment') ? 'active' : '' }} px-3" href="{{ route('payment') }}">แจ้งชำระเงิน</a>
                     </li> --}}
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/about') ? 'active' : '' }} px-3" href="{{ route('about') }}">เกี่ยวกับเรา</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('about') ? 'active' : '' }} px-3" href="{{ route('about') }}">เกี่ยวกับเรา</a>
                     </li>
                     <li class="nav-item text-md-bold mt-1">
-                        <a class="nav-link hvr-underline-from-left {{ request()->is('/contact') ? 'active' : '' }} px-3" href="{{ route('contact') }}">ติดต่อเรา</a>
+                        <a class="nav-link hvr-underline-from-left {{ request()->is('contact') ? 'active' : '' }} px-3" href="{{ route('contact') }}">ติดต่อเรา</a>
                     </li>
                 </ul>
             </div>

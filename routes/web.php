@@ -25,6 +25,13 @@ Auth::routes();
 
 Route::middleware( ['guest:web'] )->group( function ()
 {
+
+    Route::get( '/product', [PagesController::class, 'product'] )->name( 'product' );
+    Route::get( '/product-list/{id}', [PagesController::class, 'product_list'] )->name( 'product-list' );
+    Route::get( '/product/{order}/{asc}', [PagesController::class, 'product'] )->name( 'product-order' );
+    Route::get( '/category/{id}', [PagesController::class, 'category'] )->name( 'category' );
+    Route::get( '/category/{id}/{order}/{asc}', [PagesController::class, 'category'] )->name( 'category-order' );
+
     Route::view( '/how-to-buy', 'pages.how-to-buy' )->name( 'how-to-buy' );
     Route::view( '/how-to-payment', 'pages.how-to-payment' )->name( 'how-to-payment' );
     Route::view( '/about', 'pages.about' )->name( 'about' );

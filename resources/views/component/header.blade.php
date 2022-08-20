@@ -11,3 +11,4 @@
 <link rel="stylesheet" href="{{ asset('vendor/owlcarousel/dist/assets/owl.theme.default.css') }}" />
 <script src="{{ asset('vendor/owlcarousel/dist/owl.carousel.min.js') }}"></script>
 <script src="https://cdn.ckeditor.com/4.4.5/full-all/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>

@@ -13,7 +13,7 @@
                     <thead>
                         <tr>
                             <th>รหัสสินค้า</th>
-                            <th>ชื่อสินค้า</th>
+                            <th width="40%">ชื่อสินค้า</th>
                             <th>หมวดหมู่</th>
                             <th>สี</th>
                             <th>คงเหลือ</th>
@@ -27,7 +27,9 @@
                         @foreach ($product as $key => $item)
                             <tr>
                                 <td class="align-middle"><a class="text-decoration-none" href="{{ route('admin.product.show', $item->id) }}">{{ $item->code }}</a></td>
-                                <td class="align-middle"><img class="img-thumbnail me-3" style="width:60px;" src="{{ Storage::url($item->image) }}" alt="">{{ $item->product_name }}</td>
+                                <td width="40%" class="align-middle">
+                                    <img class="img-thumbnail me-3" style="width:60px;" src="{{ Storage::url($item->image) }}" alt="">{{ $item->product_name }}
+                                </td>
                                 <td class="align-middle">{!! Str::replace('>>', '<br><i class="fa fa-caret-right ms-2"></i>', getParentForSelect($item->category)) !!}</td>
                                 <td class="align-middle">{{ $item->color }}</td>
                                 <td class="{{ $item->amount > 0 ? ($item->amount <= $item->remain ? 'text-warning' : 'text-success') : 'text-danger' }} align-middle">{{ number_format($item->amount) }}</td>

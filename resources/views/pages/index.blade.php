@@ -70,10 +70,10 @@
                     <div class="owl-carousel owl-theme owl-loaded owl-drag">
                         @foreach ($main_category as $item)
                             <div>
-                                <div class="my-hover border-info rounded border p-2 text-center" style="width: 150px;height:150px;">
-                                    <img style="width: 120px;height:120px;" src="{{ Storage::url($item->img) }}" class="img-fluid d-block mx-auto" style="cursor: pointer;" alt="...">
+                                <div class="my-hover border-info mx-auto rounded border p-2 text-center" style="width: 150px;height:150px;cursor: pointer;" onclick="window.location.href='{{ route('category', $item->id) }}'">
+                                    <img style="width: 120px;height:120px;" src="{{ Storage::url($item->img) }}" class="img-fluid d-block mx-auto" alt="...">
                                 </div>
-                                <div class="text-center">
+                                <div class="p-2 text-center">
                                     <span>{{ $item->name }}</span>
                                 </div>
                             </div>
@@ -89,9 +89,9 @@
             </h4>
             <div class="row m-0">
                 @foreach ($product_sale as $item)
-                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $loop->iteration }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1" style="cursor: pointer;">
+                    <div data-aos="fade-up" data-aos-delay="{{ 50 * $loop->iteration }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img style="width: 100px;height:100px;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="...">
+                            <img style="width: 100px;height:100px;cursor: pointer;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="..." onclick="window.location.href='{{ route('product-list', $item->id) }}'">
                             <span>{{ $item->product_name }}</span><br>
                             <span class="{{ $item->discount > 0 ? 'text-dark' : '' }}">{{ $item->discount > 0 ? 'ราคาปกติ' : 'ราคา' }} : </span>
                             <span class="{{ $item->discount > 0 ? 'text-dark' : 'text-success' }}" style="{{ $item->discount > 0 ? 'text-decoration: line-through rgb(255, 100, 100);;' : '' }}">{{ number_format($item->price, 2) }} ฿</span><br>
@@ -103,10 +103,17 @@
                                 <span class="text-success">{{ number_format($item->price - ($item->price * $item->dis_price) / 100, 2) }} ฿</span><br>
                             @endif
                             <span>ขายแล้ว : {{ number_format($item->buy) }}</span><br>
-                            <button class="btn btn-primary btn-sm text-light px-1 py-0">
-                                <ion-icon name="cart-outline"></ion-icon>
-                                หยิบใส่ตระกร้า
-                            </button>
+                            @if ($item->amount > 0)
+                                <button class="btn btn-primary btn-sm text-light pick-cart px-1 py-0" data-productId="{{ $item->id }}">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    หยิบใส่ตระกร้า
+                                </button>
+                            @else
+                                <button class="btn btn-dark btn-sm text-light disabled px-1 py-0">
+                                    <i class="fa fa-minus-circle"></i>
+                                    สินค้าหมด
+                                </button>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -125,7 +132,7 @@
                 @foreach ($product_hot as $item)
                     <div data-aos="fade-up" data-aos-delay="{{ 50 * $loop->iteration }}" class="col-md-3 col-lg-2 col-sm-4 col-6 f-12 mb-1 p-1">
                         <div class="my-hover border-info rounded border p-2 text-center">
-                            <img style="width: 100px;height:100px;cursor: pointer;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="..." onclick="window.location.href='{{ $item->id }}'">
+                            <img style="width: 100px;height:100px;cursor: pointer;" src="{{ Storage::url($item->image) }}" class="img-fluid d-block mx-auto mb-1" alt="..." onclick="window.location.href='{{ route('product-list', $item->id) }}'">
                             <span>{{ $item->product_name }}</span><br>
                             <span class="{{ $item->discount > 0 ? 'text-dark' : '' }}">{{ $item->discount > 0 ? 'ราคาปกติ' : 'ราคา' }} : </span>
                             <span class="{{ $item->discount > 0 ? 'text-dark' : 'text-success' }}" style="{{ $item->discount > 0 ? 'text-decoration: line-through rgb(255, 100, 100);;' : '' }}">{{ number_format($item->price, 2) }} ฿</span><br>
@@ -137,10 +144,17 @@
                                 <span class="text-success">{{ number_format($item->price - ($item->price * $item->dis_price) / 100, 2) }} ฿</span><br>
                             @endif
                             <span>ขายแล้ว : {{ number_format($item->buy) }}</span><br>
-                            <button class="btn btn-primary btn-sm text-light px-1 py-0">
-                                <ion-icon name="cart-outline"></ion-icon>
-                                หยิบใส่ตระกร้า
-                            </button>
+                            @if ($item->amount > 0)
+                                <button class="btn btn-primary btn-sm text-light pick-cart px-1 py-0" data-productId="{{ $item->id }}">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    หยิบใส่ตระกร้า
+                                </button>
+                            @else
+                                <button class="btn btn-dark btn-sm text-light disabled px-1 py-0">
+                                    <i class="fa fa-minus-circle"></i>
+                                    สินค้าหมด
+                                </button>
+                            @endif
                         </div>
                     </div>
                 @endforeach

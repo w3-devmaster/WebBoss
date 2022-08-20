@@ -54,7 +54,60 @@ left: auto;
 display: block;
 }
 
+img.product-img {
+    display: block;
+    height: 100px;
+    width: 100px;
+  }
+
+  .product-page {
+    display: flex;
+  }
+
+  .img-display {
+    flex-grow: 1;
+  }
+
+  .thumb {
+    opacity: .7;
+    margin: 0 .25rem .25rem 0;
+    transition: opacity .25s ease-out;
+  }
+
+  .thumb:hover,
+  .thumb.active {
+    opacity: 1;
+  }
+
+  .zoom {
+    display: inline-block;
+  }
+
+  .more-image {
+    overflow-x: scroll;
+  }
+
 .clearfix {
     clear:both;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 

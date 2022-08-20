@@ -38,4 +38,14 @@
         }
         e.preventDefault();
     });
+
+    $('.buy-product').on('click', (e) => {
+
+    })
+
+    $('.pick-cart').on('click', (e) => {
+        $(e.currentTarget).html('++')
+        console.log(this)
+        // console.log(e.currentTarget.dataset.productid)
+    })
 </script>
