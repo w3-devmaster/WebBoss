@@ -1,8 +1,18 @@
 @if (!request()->routeIs('admin.*'))
-    <div class="container" style="background-image: url({{ Storage::url('default-images/stationery.png') }}); background-repeat: no-repeat;background-position: left;min-height:300px;background-size: auto 100%;">
+    <div class="d-none d-md-block container" style="background-image: url({{ Storage::url('default-images/stationery.png') }}); background-repeat: no-repeat;background-position: left;min-height:300px;background-size: auto 100%;">
         <div class="row align-items-center" style="min-height:300px;">
             <div class="col-md-8 col-12 ms-md-auto f-20 text-secondary" style="text-indent: 50px;">
                 {{ $config->before_footer }}
+            </div>
+        </div>
+    </div>
+    <div class="d-block d-md-none container">
+        <div class="row align-items-center" style="min-height:300px;">
+            <div class="col-12 ms-md-auto f-20 text-secondary" style="text-indent: 50px;">
+                {{ $config->before_footer }}
+            </div>
+            <div class="col-12">
+                <img class="img-fluid d-block mx-auto" src="{{ Storage::url('default-images/stationery.png') }}" alt="">
             </div>
         </div>
     </div>

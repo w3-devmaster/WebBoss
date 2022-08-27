@@ -20,6 +20,15 @@
                     </span>
                 </div>
                 <div class="form-group mb-3">
+                    <label for="tax_id">เลขประจำตัวผู้เสียภาษี</label>
+                    <input name="tax_id" type="text" class="form-control my-shadow @error('tax_id') is-invalid @enderror" value="{{ $setting->tax_id }}" maxlength="13">
+                    <span class="text-danger">
+                        @error('tax_id')
+                            {{ $message }}
+                        @enderror
+                    </span>
+                </div>
+                <div class="form-group mb-3">
                     <label for="address">ที่ตั้งร้าน / ที่ตั้งบริษัท</label>
                     <input name="address" type="text" class="form-control my-shadow @error('address') is-invalid @enderror" value="{{ $setting->address }}">
                     <span class="text-danger">

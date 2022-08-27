@@ -5,20 +5,34 @@
         <div class="col-12 mb-2">
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    @if (count($slide_main) > 0)
+                        @foreach ($slide_main as $item)
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $loop->index }}" @if ($loop->first) class="active" aria-current="true" @endif aria-label="Slide {{ $loop->iteration }}"></button>
+                        @endforeach
+                    @else
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    @endif
                 </div>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
-                    </div>
+                    @if (count($slide_main) > 0)
+                        @foreach ($slide_main as $item)
+                            <div class="carousel-item @if ($loop->first) active @endif">
+                                <img src="{{ Storage::url($item->image) }}" class="d-block w-100" alt="...">
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="carousel-item active">
+                            <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/1200x300.png" class="d-block w-100" alt="...">
+                        </div>
+                    @endif
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -33,30 +47,46 @@
         <div class="col-12 col-md-6 pe-md-1 mb-2">
             <div id="carouselExampleSlidesOnly1" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
+                    @if (count($slide_bl) > 0)
+                        @foreach ($slide_bl as $item)
+                            <div class="carousel-item @if ($loop->first) active @endif">
+                                <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="carousel-item active">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
         <div class="col-12 col-md-6 ps-md-1 mb-2">
             <div id="carouselExampleSlidesOnly2" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
-                    </div>
+                    @if (count($slide_br) > 0)
+                        @foreach ($slide_br as $item)
+                            <div class="carousel-item @if ($loop->first) active @endif">
+                                <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="carousel-item active">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -119,7 +149,7 @@
                 @endforeach
             </div>
             <p class="border-top border-info mb-0 text-center">
-                <a class="btn btn-link text-primary f-12" href="">
+                <a class="btn btn-link text-primary f-12" href="{{ route('product-order', ['discount', 0]) }}">
                     <ion-icon name="list" class="me-1"></ion-icon> ดูทั้งหมด
                 </a>
             </p>
@@ -160,7 +190,7 @@
                 @endforeach
             </div>
             <p class="border-top border-info mb-0 text-center">
-                <a class="btn btn-link text-primary f-12" href="">
+                <a class="btn btn-link text-primary f-12" href="{{ route('product-order', ['buy', 0]) }}">
                     <ion-icon name="list" class="me-1"></ion-icon> ดูทั้งหมด
                 </a>
             </p>

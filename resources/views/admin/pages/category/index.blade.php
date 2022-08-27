@@ -13,7 +13,7 @@
                     <ul class="list-unstyled">
                         {{-- 1 --}}
                         @foreach ($category as $key => $item)
-                            <li class="mt-1"><a class="btn btn-link text-light hvr-underline-from-left" href="{{ route('admin.category.show', $item->id) }}"><i class="fa fa-angle-double-right me-3"></i> {{ $item->name }}</a></li>
+                            <li class="mt-1"><a class="btn btn-link text-light hvr-underline-from-left text-decoration-none" href="{{ route('admin.category.show', $item->id) }}"><i class="fa fa-angle-double-right me-3"></i> {{ $item->name }} ({{ countProductByCat($item->id) }})</a></li>
                             @php
                                 $child = getCategoryChildByParent($item->id);
                             @endphp
@@ -21,17 +21,18 @@
                                 <ul class="list-unstyled ms-5">
                                     {{-- 2 --}}
                                     @foreach ($child as $a)
-                                        <li><a class="btn btn-link text-light hvr-underline-from-left" href="{{ route('admin.category.show', $a['id']) }}"><i class="fa fa-angle-right me-2"></i> {{ $a['name'] }}</a></li>
+                                        <li><a class="btn btn-link text-light hvr-underline-from-left text-decoration-none" href="{{ route('admin.category.show', $a['id']) }}"><i class="fa fa-angle-right me-2"></i> {{ $a['name'] }} ({{ countProductByCat($a['id']) }})</a></li>
                                         @if ($a['child'])
                                             <ul class="list-unstyled ms-5">
                                                 {{-- 3 --}}
                                                 @foreach (getCategoryChildByParent($a['id']) as $b)
-                                                    <li><a class="btn btn-link text-light hvr-underline-from-left" href="{{ route('admin.category.show', $b['id']) }}"><i class="fa fa-caret-right me-2"></i> {{ $b['name'] }}</a></li>
+                                                    <li><a class="btn btn-link text-light hvr-underline-from-left text-decoration-none" href="{{ route('admin.category.show', $b['id']) }}"><i class="fa fa-caret-right me-2"></i> {{ $b['name'] }} ({{ countProductByCat($b['id']) }})</a></li>
                                                     @if ($b['child'])
                                                         <ul class="list-unstyled ms-5">
                                                             {{-- 4 --}}
                                                             @foreach (getCategoryChildByParent($b['id']) as $c)
-                                                                <li><a class="btn btn-link text-light hvr-underline-from-left" href="{{ route('admin.category.show', $c['id']) }}"><i class="fa fa-long-arrow-alt-right me-2"></i> {{ $c['name'] }}</a></li>
+                                                                <li><a class="btn btn-link text-light hvr-underline-from-left text-decoration-none" href="{{ route('admin.category.show', $c['id']) }}"><i class="fa fa-long-arrow-alt-right me-2"></i> {{ $c['name'] }}
+                                                                        ({{ countProductByCat($c['id']) }})</a></li>
                                                             @endforeach
                                                         </ul>
                                                     @endif

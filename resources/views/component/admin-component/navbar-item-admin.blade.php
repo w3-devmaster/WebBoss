@@ -14,13 +14,13 @@
     <hr class="my-1">
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin1') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
+    <a href="{{ route('admin.order-list') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin/order-list') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
         <i class="bi bi-list-ol me-2"></i>
         รายการสั่งซื้อ
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin1') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
+    <a href="{{ route('admin.order-success') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin/order-success') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
         <i class="bi bi-list-check me-2"></i>
         รายการสั่งซื้อที่สมบูรณ์แล้ว
     </a>

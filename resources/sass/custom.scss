@@ -111,3 +111,11 @@ img.product-img {
     background: #555;
   }
 
+  #preloader {
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100%;
+    position:fixed;
+    z-index: 2000;
+  }
+

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 
 class SettingController extends Controller
 {
@@ -21,8 +23,14 @@ class SettingController extends Controller
 
     public function save_setting( Request $request )
     {
+        if ( !Schema::hasColumn( 'settings', 'tax_id' ) )
+        {
+            Artisan::call( 'migrate' );
+        }
+
         $request->validate( [
             'company_name'  => 'required|string',
+            'tax_id'        => 'required|numeric|digits:13',
             'address'       => 'required|string',
             'email'         => 'required|email',
             'phone'         => 'required|string',
@@ -33,6 +41,7 @@ class SettingController extends Controller
 
         $setting                = Setting::find( 1 );
         $setting->company_name  = $request->company_name;
+        $setting->tax_id        = $request->tax_id;
         $setting->address       = $request->address;
         $setting->email         = $request->email;
         $setting->phone         = $request->phone;

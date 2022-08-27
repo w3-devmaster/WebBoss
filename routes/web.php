@@ -3,8 +3,11 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SlideController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,27 +26,49 @@ Route::get( '/', [PagesController::class, 'index'] )->name( 'index' );
 
 Auth::routes();
 
-Route::middleware( ['guest:web'] )->group( function ()
-{
+Route::get( '/cart', [PagesController::class, 'cart'] )->name( 'cart' );
+Route::post( '/store-cart', [PagesController::class, 'store_cart'] )->name( 'store_cart' );
+Route::post( '/edit-cart', [PagesController::class, 'edit_cart'] )->name( 'edit_cart' );
+Route::post( '/del-cart', [PagesController::class, 'del_cart'] )->name( 'del_cart' );
+Route::post( '/clear-cart', [PagesController::class, 'clear_cart'] )->name( 'clear_cart' );
 
-    Route::get( '/product', [PagesController::class, 'product'] )->name( 'product' );
-    Route::get( '/product-list/{id}', [PagesController::class, 'product_list'] )->name( 'product-list' );
-    Route::get( '/product/{order}/{asc}', [PagesController::class, 'product'] )->name( 'product-order' );
-    Route::get( '/category/{id}', [PagesController::class, 'category'] )->name( 'category' );
-    Route::get( '/category/{id}/{order}/{asc}', [PagesController::class, 'category'] )->name( 'category-order' );
+Route::get( '/product', [PagesController::class, 'product'] )->name( 'product' );
+Route::get( '/product-list/{id}', [PagesController::class, 'product_list'] )->name( 'product-list' );
+Route::get( '/product/{order}/{asc}', [PagesController::class, 'product'] )->name( 'product-order' );
+Route::get( '/category/{id}', [PagesController::class, 'category'] )->name( 'category' );
+Route::get( '/category/{id}/{order}/{asc}', [PagesController::class, 'category'] )->name( 'category-order' );
 
-    Route::view( '/how-to-buy', 'pages.how-to-buy' )->name( 'how-to-buy' );
-    Route::view( '/how-to-payment', 'pages.how-to-payment' )->name( 'how-to-payment' );
-    Route::view( '/about', 'pages.about' )->name( 'about' );
-    Route::view( '/contact', 'pages.contact' )->name( 'contact' );
-    Route::view( '/privacy-policy', 'pages.privacy-policy' )->name( 'privacy-policy' );
-    Route::view( '/refund-policy', 'pages.refund-policy' )->name( 'refund-policy' );
-    Route::view( '/product-policy', 'pages.product-policy' )->name( 'product-policy' );
-} );
+Route::post( '/register-payment', [PagesController::class, 'register_payment'] )->name( 'register-payment' );
+Route::post( '/login-payment', [PagesController::class, 'login_payment'] )->name( 'login-payment' );
+
+Route::view( '/how-to-buy', 'pages.how-to-buy' )->name( 'how-to-buy' );
+Route::view( '/how-to-payment', 'pages.how-to-payment' )->name( 'how-to-payment' );
+Route::view( '/about', 'pages.about' )->name( 'about' );
+Route::view( '/contact', 'pages.contact' )->name( 'contact' );
+Route::view( '/privacy-policy', 'pages.privacy-policy' )->name( 'privacy-policy' );
+Route::view( '/refund-policy', 'pages.refund-policy' )->name( 'refund-policy' );
+Route::view( '/product-policy', 'pages.product-policy' )->name( 'product-policy' );
 
 Route::middleware( ['auth:web', 'PreventBackHistory'] )->group( function ()
 {
-    Route::view( '/home', 'pages.index' )->name( 'home' );
+    Route::post( '/order-create', [PagesController::class, 'order_create'] )->name( 'order-create' );
+} );
+
+Route::prefix( 'user' )->name( 'user.' )->group( function ()
+{
+    Route::middleware( ['auth:web', 'PreventBackHistory'] )->group( function ()
+    {
+        // Route::view( '/home', 'pages.index' )->name( 'home' );
+        Route::get( '/', [UserController::class, 'index'] )->name( 'index' );
+        Route::post( '/update-user', [UserController::class, 'update_user'] )->name( 'update-user' );
+        Route::view( '/changepassword', 'user.changepassword' )->name( 'changepassword' );
+        Route::post( '/changepassword-take', [UserController::class, 'changepassword'] )->name( 'changepassword-take' );
+        Route::view( '/payment', 'user.payment' )->name( 'payment' );
+        Route::post( '/payment', [UserController::class, 'payment'] )->name( 'payment-add' );
+        Route::get( '/billing', [UserController::class, 'billing'] )->name( 'billing' );
+        Route::get( '/billing-info/{id}', [UserController::class, 'billing_info'] )->name( 'billing-info' );
+        Route::get( '/receipt/{id}', [PDFController::class, 'receipt_user'] )->name( 'receipt' );
+    } );
 } );
 
 Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
@@ -64,6 +89,16 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::post( '/setting', [SettingController::class, 'save_setting'] )->name( 'save-setting' );
         Route::resource( '/category', CategoryController::class, ['name' => 'category'] );
         Route::resource( '/product', ProductController::class, ['name' => 'product'] );
+
+        Route::get( '/order-list', [AdminController::class, 'order_list'] )->name( 'order-list' );
+        Route::get( '/order-success', [AdminController::class, 'order_success'] )->name( 'order-success' );
+        Route::get( '/order/{order}', [AdminController::class, 'order_view'] )->name( 'order' );
+        Route::post( '/update-order/{order}', [AdminController::class, 'update_order'] )->name( 'update-order' );
+        Route::post( '/update-send/{order}', [AdminController::class, 'update_send'] )->name( 'update-send' );
+
+        Route::get( '/receipt/{id}', [PDFController::class, 'receipt'] )->name( 'receipt' );
+
+        Route::resource( '/slide', SlideController::class, ['name' => 'slide'] );
 
         Route::prefix( 'setting' )->name( 'setting.' )->group( function ()
         {

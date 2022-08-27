@@ -22,8 +22,10 @@
                 <i class="fa fa-user me-1"></i> {{ Auth::guard('web')->user()->firstname }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                <a class="dropdown-item" href=""><i class="fa fa-id-card me-1"></i>ข้อมูลส่วนตัว</a>
-                <a class="dropdown-item" href=""><i class="fa fa-key me-1"></i>เปลี่ยนรหัสผ่าน</a>
+                <a class="dropdown-item" href="{{ route('user.billing') }}"><i class="fa fa-file-invoice-dollar me-1"></i></i>ประวัติการสั้งซื้อ</a>
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" href="{{ route('user.index') }}"><i class="fa fa-id-card me-1"></i>ข้อมูลส่วนตัว</a>
+                <a class="dropdown-item" href="{{ route('user.changepassword') }}"><i class="fa fa-key me-1"></i>เปลี่ยนรหัสผ่าน</a>
                 <hr class="dropdown-divider">
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
@@ -59,8 +61,14 @@
 @endauth
 
 @if (!request()->routeIs('admin.*'))
-    <button class="btn btn-primary btn-sm my-shadow position-relative py-0 px-2">
-        <span id="cart" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0">5</span>
+    <button class="btn btn-primary btn-sm my-shadow position-relative py-0 px-2" onclick="window.location.href='{{ route('cart') }}'">
+        @if (!empty(session('cart')))
+            <span id="cart" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0">
+                {{ count(session('cart')) }}
+            </span>
+        @else
+            <span id="cart" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0"></span>
+        @endif
         <ion-icon name="cart" class="f-22 text-white"></ion-icon>
     </button>
 @endif

@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Billing;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Receipt;
 
 if ( !function_exists( 'getCategoryChildByParent' ) )
 {
@@ -112,6 +115,59 @@ if ( !function_exists( 'getParentSeqments' ) )
         $item = array_flip( $item );
 
         return $item;
+    }
+}
+
+if ( !function_exists( 'getProduct' ) )
+{
+    function getProduct( $id )
+    {
+        if ( !Product::whereId( $id )->exists() )
+        {
+            return null;
+        }
+
+        return Product::find( $id );
+    }
+}
+
+if ( !function_exists( 'countProductByCat' ) )
+{
+    function countProductByCat( $category )
+    {
+        return Product::where( 'category', $category )->count();
+    }
+}
+
+if ( !function_exists( 'getReceiptFromPo' ) )
+{
+    function getReceiptFromPo( $po )
+    {
+        if ( !Receipt::whereBilling( $po->id )->exists() )
+        {
+            return Receipt::create( [
+                'user'         => $po->user,
+                'code'         => genReceiptCode( $po->mode ),
+                'billing'      => $po->id,
+                'mode'         => $po->mode,
+                'tax_id'       => $po->tax_id,
+                'customer'     => $po->customer,
+                'send_address' => $po->send_address,
+                'product'      => $po->product,
+            ] );
+        }
+        else
+        {
+            return Receipt::whereBilling( $po->id )->first();
+        }
+    }
+}
+
+if ( !function_exists( 'getBilling' ) )
+{
+    function getBilling( $id )
+    {
+        return Billing::whereId( $id )->first();
     }
 }
 

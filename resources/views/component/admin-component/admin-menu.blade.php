@@ -11,6 +11,9 @@
         <a class="dropdown-item" href="{{ route('admin.setting') }}">
             <ion-icon name="cog-outline" class="me-1"></ion-icon>ตั้งค่าระบบ
         </a>
+        <a class="dropdown-item" href="{{ route('admin.slide.index') }}">
+            <ion-icon name="images-outline" class="me-1"></ion-icon>แก้ไขภาพสไลด์
+        </a>
         <a class="dropdown-item" href="{{ route('admin.changepassword') }}">
             <ion-icon name="key-outline" class="me-1"></ion-icon>เปลี่ยนรหัสผ่าน
         </a>

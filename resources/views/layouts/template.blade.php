@@ -24,6 +24,13 @@
 </head>
 
 <body>
+    <div id="preloader" class="d-flex align-items-center justify-content-center">
+        <div class="text-center">
+            <div class="spinner-border text-light f-36" role="status" style="width: 5rem; height: 5rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
     @include('component.navbar')
     <main class="py-4" style="background-image: url({{ Storage::url('default-images/top-bg.png') }}); background-repeat: repeat-x;background-position: center top;">
         @yield('main-content')
@@ -31,6 +38,5 @@
     @include('component.footer')
     @include('component.script')
 </body>
-
 
 </html>

@@ -15,5 +15,7 @@ class ResetStoreSeeder extends Seeder
     public function run()
     {
         Storage::deleteDirectory( 'public/category' );
+        Storage::deleteDirectory( 'public/product' );
+        Storage::deleteDirectory( 'public/payment' );
     }
 }
