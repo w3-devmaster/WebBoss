@@ -83,7 +83,7 @@ class UserController extends Controller
 
         if ( $user != $billing->user )
         {
-            return redirect()->route( 'billing' );
+            return redirect()->route( 'user.billing' );
         }
 
         return view( 'user.billing-info', compact( 'billing' ) );

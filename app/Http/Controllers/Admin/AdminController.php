@@ -6,12 +6,44 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Billing;
 use App\Models\Receipt;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
+    public function index()
+    {
+        $data             = [];
+        $data['bill'][1]  = Billing::where( 'bill_status', 1 )->count();
+        $data['bill'][2]  = Billing::where( 'bill_status', 2 )->count();
+        $data['order'][2] = Billing::where( 'order_status', 2 )->count();
+        $data['order'][3] = Billing::where( 'order_status', 3 )->count();
+        $data['cancel']   = Billing::where( 'order_status', 4 )->orWhere( 'bill_status', 3 )->count();
+
+        // dd( $data );
+
+        return view( 'admin.index', compact( 'data' ) );
+    }
+
+    public function dashboard()
+    {
+        $resp = Billing::select(
+            DB::raw( 'sum(price) as sums' ),
+            DB::raw( "DATE_FORMAT(created_at,'%M %Y') as months" )
+        )->where( ['bill_status' => 2] )->groupBy( 'months' )->get();
+        $data = [];
+        foreach ( $resp as $key => $value )
+        {
+            $data[$value->months] = $value->sums;
+        }
+
+        return view( 'admin.dashboard', compact( 'data' ) );
+    }
+
     public function check( Request $request )
     {
         $request->validate( [
@@ -64,8 +96,9 @@ class AdminController extends Controller
     {
         $billing        = Billing::where( ['order_status' => 1, 'bill_status' => 1] )->get();
         $billing_accept = Billing::where( 'order_status', '<', 3 )->where( 'order_status', '>', 1 )->where( 'bill_status', '<=', 2 )->get();
+        $billing_cancel = Billing::where( 'bill_status', 3 )->get();
 
-        return view( 'admin.pages.order-list', compact( 'billing', 'billing_accept' ) );
+        return view( 'admin.pages.order-list', compact( 'billing', 'billing_accept', 'billing_cancel' ) );
     }
 
     public function order_success()
@@ -84,8 +117,17 @@ class AdminController extends Controller
 
     public function update_order( Request $request, Billing $order )
     {
-        $order->bill_status  = $request->bill_status;
-        $order->order_status = 2;
+        $order->bill_status = $request->bill_status;
+        if ( $request->bill_status == 3 )
+        {
+            $order->order_status = 5;
+            Storage::delete( $order->payment );
+            $order->payment = null;
+        }
+        else
+        {
+            $order->order_status = 2;
+        }
         $order->save();
 
         Receipt::create( [
@@ -119,5 +161,19 @@ class AdminController extends Controller
         $order->save();
 
         return redirect()->route( 'admin.order-list' )->with( 'success', 'ดำเนินการเสร็จสิ้น' );
+    }
+
+    public function customers()
+    {
+        $customers = User::all();
+
+        return view( 'admin.pages.customers', compact( 'customers' ) );
+    }
+
+    public function customer( $id )
+    {
+        $customer = User::whereId( $id )->first();
+
+        return view( 'admin.pages.customer', compact( 'customer' ) );
     }
 }

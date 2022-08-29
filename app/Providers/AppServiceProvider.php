@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Billing;
 use App\Models\Category;
 use App\Models\Setting;
 use Illuminate\Pagination\Paginator;
@@ -41,6 +42,13 @@ class AppServiceProvider extends ServiceProvider
             $category = Category::whereLevel( 0 )->get();
 
             view()->share( 'menu_category', $category );
+        }
+
+        if ( Schema::hasTable( 'billings' ) )
+        {
+            $newbill = Billing::where( ['order_status' => 1, 'bill_status' => 1] )->count();
+
+            view()->share( 'newbill', $newbill );
         }
     }
 }

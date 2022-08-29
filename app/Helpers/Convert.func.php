@@ -49,6 +49,7 @@ if ( !function_exists( 'getOrderStatus' ) )
             2 => '<span class="badge bg-warning" >จัดเตรียมสินค้า</span>',
             3 => '<span class="badge bg-success" >จัดส่งแล้ว</span>',
             4 => '<span class="badge bg-secondary" >ยกเลิกคำสั่งซื้อ</span>',
+            5 => '<span class="badge bg-secondary" >รอการแก้ไขการชำระเงิน</span>',
         ];
 
         return $status[$st] ?? '-';
@@ -67,6 +68,20 @@ if ( !function_exists( 'getBillingStatus' ) )
         ];
 
         return $status[$st] ?? '-';
+    }
+}
+
+if ( !function_exists( 'getAdminType' ) )
+{
+    function getAdminType( $type )
+    {
+        if ( $type >= 100 )
+        {
+            return '<span class="badge bg-danger" >ผู้ดูแลระบบ</span>';
+        }
+
+        return '<span class="badge bg-primary" >พนักงาน</span>';
+
     }
 }
 

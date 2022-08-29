@@ -17,6 +17,9 @@
     <a href="{{ route('admin.order-list') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin/order-list') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
         <i class="bi bi-list-ol me-2"></i>
         รายการสั่งซื้อ
+        @if ($newbill > 0)
+            <span class="badge bg-success">{{ $newbill }}</span>
+        @endif
     </a>
 </li>
 <li class="nav-item">
@@ -35,13 +38,13 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="{{ route('admin.product.index') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin1') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
+    <a href="{{ route('admin.product.index') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin/product*') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
         <i class="bi bi-bag-check me-2"></i>
         สินค้า
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin1') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
+    <a href="{{ route('admin.customers') }}" class="nav-link hvr-underline-from-left d-block {{ request()->is('admin/customers') ? 'active placeholder-wave bg-secondary' : '' }} text-white">
         <i class="bi bi-people me-2"></i>
         ลูกค้า
     </a>

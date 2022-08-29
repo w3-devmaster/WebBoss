@@ -30,6 +30,9 @@ if ( !function_exists( 'getSeqments' ) )
             'order-list'     => 'รายการคำสั่งซื้อ',
             'order'          => 'คำสั่งซื้อ',
             'slide'          => 'ภาพสไลด์',
+            'customers'      => 'รายชื่อลูกค้า',
+            'customer'       => 'ชื่อลูกค้า',
+            'manage'         => 'รายชื่อผู้ดูแล',
         ];
 
         return $seqments[$seqment] ?? '...';

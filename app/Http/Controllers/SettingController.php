@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Schema;
 
 class SettingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware( 'IsOwner' );
+    }
+
     public function index()
     {
         if ( !Setting::whereId( 1 )->exists() )

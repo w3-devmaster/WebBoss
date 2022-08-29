@@ -162,6 +162,11 @@ class ProductController extends Controller
      */
     public function destroy( Product $product )
     {
-        //
+        Storage::delete( $product->image );
+        Storage::delete( json_decode( $product->images, true ) );
+
+        $product->delete();
+
+        return redirect()->back()->with( 'success', 'ลบข้อมูลเสร็จสิ้น' );
     }
 }

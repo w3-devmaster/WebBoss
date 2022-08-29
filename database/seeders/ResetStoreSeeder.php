@@ -17,5 +17,6 @@ class ResetStoreSeeder extends Seeder
         Storage::deleteDirectory( 'public/category' );
         Storage::deleteDirectory( 'public/product' );
         Storage::deleteDirectory( 'public/payment' );
+        Storage::deleteDirectory( 'public/slide' );
     }
 }

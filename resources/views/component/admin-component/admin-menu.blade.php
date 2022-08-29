@@ -8,6 +8,9 @@
         <a class="dropdown-item" href="{{ route('index') }}">
             <ion-icon name="home-outline" class="me-1"></ion-icon>กลับหน้าร้าน
         </a>
+        <a class="dropdown-item" href="{{ route('admin.manage.index') }}">
+            <ion-icon name="people-circle-outline" class="me-1"></ion-icon>ผู้ใช้งาน
+        </a>
         <a class="dropdown-item" href="{{ route('admin.setting') }}">
             <ion-icon name="cog-outline" class="me-1"></ion-icon>ตั้งค่าระบบ
         </a>

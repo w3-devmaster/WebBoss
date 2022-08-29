@@ -21,6 +21,7 @@
                             <th>ยอดดู</th>
                             <th>ขายแล้ว</th>
                             <th>สถานะ</th>
+                            <th>ลบ</th>
                         </tr>
                     </thead>
                     <tbody class="f-14">
@@ -54,6 +55,13 @@
                                         <span class="text-danger">- {{ number_format($item->dis_price, 2) }}%</span>
                                     @endif
                                 </td>
+                                <td class="align-middle">
+                                    <span class="delete" data-num="{{ $item->id }}" data-title="ลบสินค้า" data-text1="ต้องการลบ" data-text2="{{ $item->product_name }}"><i class="fa fa-times text-danger" style="cursor: pointer;"></i></span>
+                                    <form id="formdel_{{ $item->id }}" action="{{ route('admin.product.destroy', $item->id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -75,5 +83,13 @@
                 },
             });
         });
+
+        $('.delete').on('click', (e) => {
+            alertify.confirm(`ต้องการลบ ${e.currentTarget.dataset.title}`, `${e.currentTarget.dataset.text1} <br> ${e.currentTarget.dataset.text2} หรือไม่?`, function() {
+                $('#formdel_' + e.currentTarget.dataset.num).submit();
+            }, function() {
+                alertify.error('ยกเลิกการลบ')
+            });
+        })
     </script>
 @endsection

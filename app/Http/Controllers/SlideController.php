@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class SlideController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware( 'IsOwner' );
+    }
+
     /**
      * Display a listing of the resource.
      *

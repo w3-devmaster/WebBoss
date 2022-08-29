@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ManageController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PDFController;
@@ -81,14 +82,16 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
 
     Route::middleware( ['auth:admin', 'PreventBackHistory'] )->group( function ()
     {
-        Route::view( '/', 'admin.index' )->name( 'index' );
-        Route::view( '/dashboard', 'admin.index' )->name( 'dashboard' );
+        Route::get( '/', [AdminController::class, 'index'] )->name( 'index' );
+        Route::get( '/dashboard', [AdminController::class, 'dashboard'] )->name( 'dashboard' );
         Route::view( '/changepassword', 'admin.changepassword' )->name( 'changepassword' );
         Route::post( '/changepassword-take', [AdminController::class, 'changepassword'] )->name( 'changepassword-take' );
         Route::get( '/setting', [SettingController::class, 'index'] )->name( 'setting' );
         Route::post( '/setting', [SettingController::class, 'save_setting'] )->name( 'save-setting' );
         Route::resource( '/category', CategoryController::class, ['name' => 'category'] );
         Route::resource( '/product', ProductController::class, ['name' => 'product'] );
+        Route::get( '/customers', [AdminController::class, 'customers'] )->name( 'customers' );
+        Route::get( '/customer/{id}', [AdminController::class, 'customer'] )->name( 'customer' );
 
         Route::get( '/order-list', [AdminController::class, 'order_list'] )->name( 'order-list' );
         Route::get( '/order-success', [AdminController::class, 'order_success'] )->name( 'order-success' );
@@ -99,6 +102,12 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::get( '/receipt/{id}', [PDFController::class, 'receipt'] )->name( 'receipt' );
 
         Route::resource( '/slide', SlideController::class, ['name' => 'slide'] );
+
+        Route::middleware( 'IsOwner' )->group( function ()
+        {
+            Route::resource( '/manage', ManageController::class, ['name' => 'manage'] );
+
+        } );
 
         Route::prefix( 'setting' )->name( 'setting.' )->group( function ()
         {
