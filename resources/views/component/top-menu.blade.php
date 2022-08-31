@@ -1,8 +1,9 @@
 @if (!request()->routeIs('admin.*'))
-    <form class="d-flex ms-auto me-3 mb-md-0 mb-lg-0 mb-3">
+    <form action="{{ route('search-product') }}" class="d-flex ms-auto me-3 mb-md-0 mb-lg-0 mb-3" method="post">
+        @csrf
         <div class="input-group input-group-sm my-shadow">
             <span class="input-group-text">ค้นหาสินค้า</span>
-            <input class="form-control" type="search" placeholder="ค้นหาสินค้า">
+            <input name="data" class="form-control" type="search" placeholder="ค้นหาสินค้า">
             <input class="btn btn-sm btn-outline-primary" type="submit" value="ค้นหา">
         </div>
     </form>
@@ -63,11 +64,11 @@
 @if (!request()->routeIs('admin.*'))
     <button class="btn btn-primary btn-sm my-shadow position-relative py-0 px-2" onclick="window.location.href='{{ route('cart') }}'">
         @if (!empty(session('cart')))
-            <span id="cart" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0">
+            <span class="cart position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0">
                 {{ count(session('cart')) }}
             </span>
         @else
-            <span id="cart" class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0"></span>
+            <span class="cart position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0"></span>
         @endif
         <ion-icon name="cart" class="f-22 text-white"></ion-icon>
     </button>

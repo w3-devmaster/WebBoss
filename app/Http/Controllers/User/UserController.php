@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Billing;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,6 +105,14 @@ class UserController extends Controller
         $billing->order_status = 1;
         $billing->bill_status  = 1;
         $billing->save();
+
+        foreach ( json_decode( $billing->product, true ) as $value )
+        {
+            $amount = (Int) $value['amount'];
+            $p      = Product::where( 'code', $value['code'] )->first();
+            $p->decrement( 'amount', $amount );
+            $p->increment( 'buy', $amount );
+        }
 
         return redirect()->back()->with( 'success', 'แจ้งชำระเงินเสร็จสิ้น' );
     }

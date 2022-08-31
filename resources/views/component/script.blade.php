@@ -46,12 +46,14 @@
     });
 
     $('.buy-product').on('click', (e) => {
+        let amount = $('#amount_' + e.currentTarget.dataset.productid).val() ?? 1
         $.ajax({
             url: "{{ route('store_cart') }}",
             type: 'post',
             data: {
                 _token: '{{ csrf_token() }}',
-                product: e.currentTarget.dataset.productid
+                product: e.currentTarget.dataset.productid,
+                amount: amount
             },
             success: (resp) => {
                 window.location.href = "{{ route('cart') }}"
@@ -60,12 +62,14 @@
     })
 
     $('.pick-cart').on('click', (e) => {
+        let amount = $('#amount_' + e.currentTarget.dataset.productid).val() ?? 1
         $.ajax({
             url: "{{ route('store_cart') }}",
             type: 'post',
             data: {
                 _token: '{{ csrf_token() }}',
-                product: e.currentTarget.dataset.productid
+                product: e.currentTarget.dataset.productid,
+                amount: amount
             },
             beforeSend: () => {
                 $('#preloader').removeClass('d-none')
@@ -77,16 +81,16 @@
                 $(e.currentTarget).html(`<i class="fa fa-shopping-cart"></i>หยิบใส่ตระกร้า`)
                 $(e.currentTarget).attr('disabled', false)
                 if (Object.keys(resp).length <= 0) {
-                    $('#cart').html('');
+                    $('.cart').html('');
                 } else {
-                    $('#cart').html(Object.keys(resp).length);
+                    $('.cart').html(Object.keys(resp).length);
                 }
                 alertify.success('หยิบแล้ว!! โปรดดูที่ตระกร้าสินค้า');
             }
         })
     })
 
-    $('.edit-amount').change((e) => {
+    $('.edit-amount').blur((e) => {
         $.ajax({
             url: "{{ route('edit_cart') }}",
             type: 'post',
@@ -130,4 +134,18 @@
             }
         })
     })
+
+    if ($(window).scrollTop() > 220) {
+        $('#btn-cart').show()
+    }
+
+    $(window).on('mousewheel', function(e) {
+        let scroll = $(window).scrollTop()
+        if (scroll > 220) {
+            $('#btn-cart').show()
+        } else
+        if (scroll < 220) {
+            $('#btn-cart').hide()
+        }
+    });
 </script>

@@ -33,6 +33,7 @@ if ( !function_exists( 'getSeqments' ) )
             'customers'      => 'รายชื่อลูกค้า',
             'customer'       => 'ชื่อลูกค้า',
             'manage'         => 'รายชื่อผู้ดูแล',
+            'test'           => 'เพิ่มข้อมูลสำหรับทดสอบระบบ',
         ];
 
         return $seqments[$seqment] ?? '...';

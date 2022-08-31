@@ -8,8 +8,10 @@ use App\Models\Product;
 use App\Models\Slide;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class PagesController extends Controller
 {
@@ -27,7 +29,9 @@ class PagesController extends Controller
 
     public function product_list( $id )
     {
-        $product       = Product::find( $id );
+        $product = Product::find( $id );
+        $product->increment( 'view' );
+
         $other_product = Product::inRandomOrder()->whereCategory( $product->category )->limit( 24 )->get();
 
         return view( 'pages.product-list', compact( 'product', 'other_product' ) );
@@ -56,19 +60,50 @@ class PagesController extends Controller
 
     public function category( $id, $order = null, $asc = true )
     {
+        $cat_id            = [];
+        $cat_id[(Int) $id] = 1;
+        $cat               = Category::where( 'parent', $id )->get();
+        foreach ( $cat as $value1 )
+        {
+            $cat_id[$value1->id] = 1;
+            $cat1                = Category::where( 'parent', $value1->id )->get();
+            foreach ( $cat1 as $value2 )
+            {
+                $cat_id[$value2->id] = 1;
+                $cat2                = Category::where( 'parent', $value2->id )->get();
+                foreach ( $cat2 as $value3 )
+                {
+                    $cat_id[$value3->id] = 1;
+                    $cat3                = Category::where( 'parent', $value3->id )->get();
+                    foreach ( $cat3 as $value4 )
+                    {
+                        $cat_id[$value4->id] = 1;
+                    }
+                }
+            }
+
+        }
+
+        $where = [];
+        foreach ( $cat_id as $key => $value )
+        {
+            $where[] = $key;
+        }
+
         if ( $order == null )
         {
-            $product = Product::whereCategory( $id )->paginate( 36 );
+
+            $product = Product::whereIn( 'category', $where )->paginate( 36 );
         }
         else
         {
             if ( $asc )
             {
-                $product = Product::whereCategory( $id )->orderBy( $order )->paginate( 36 );
+                $product = Product::whereIn( 'category', $where )->orderBy( $order )->paginate( 36 );
             }
             else
             {
-                $product = Product::whereCategory( $id )->orderByDesc( $order )->paginate( 36 );
+                $product = Product::whereIn( 'category', $where )->orderByDesc( $order )->paginate( 36 );
             }
         }
 
@@ -88,11 +123,28 @@ class PagesController extends Controller
 
         if ( array_key_exists( $request->product, session( 'cart' ) ) )
         {
-            $cart[$request->product] += 1;
+            $product = getProduct( $request->product );
+            $all     = $cart[$request->product] + $request->amount;
+            if ( $all > $product->amount )
+            {
+                $cart[$request->product] = $product->amount;
+            }
+            else
+            {
+                $cart[$request->product] += $request->amount;
+            }
         }
         else
         {
-            $cart[$request->product] = 1;
+            $product = getProduct( $request->product );
+            if ( $request->amount > $product->amount )
+            {
+                $cart[$request->product] = $product->amount;
+            }
+            else
+            {
+                $cart[$request->product] = $request->amount;
+            }
         }
 
         session( ['cart' => $cart] );
@@ -112,8 +164,15 @@ class PagesController extends Controller
         }
         else
         {
-            $cart[$request->product] = $request->amount;
-
+            $product = getProduct( $request->product );
+            if ( $request->amount > $product->amount )
+            {
+                $cart[$request->product] = $product->amount;
+            }
+            else
+            {
+                $cart[$request->product] = $request->amount;
+            }
         }
 
         session( ['cart' => $cart] );
@@ -195,6 +254,11 @@ class PagesController extends Controller
 
     public function order_create( Request $request )
     {
+        if ( !Schema::hasColumns( 'billings', ['discount', 'dis_price'] ) )
+        {
+            Artisan::call( 'migrate' );
+        }
+
         $user      = Auth::guard( 'web' )->user()->id;
         $account   = User::whereId( $user )->first();
         $price_all = $request->price;
@@ -226,15 +290,15 @@ class PagesController extends Controller
         foreach ( session( 'cart' ) as $key => $value )
         {
             $product = getProduct( $key );
-            if ( $product->discount === 0 )
+            if ( $product->discount == 0 )
             {
                 $price = $product->price;
             }
-            elseif ( $product->discount === 1 )
+            elseif ( $product->discount == 1 )
             {
                 $price = $product->price - $product->dis_price;
             }
-            elseif ( $product->discount === 2 )
+            elseif ( $product->discount == 2 )
             {
                 $price = $product->price - ( $product->price * $product->dis_price ) / 100;
             }
@@ -245,6 +309,7 @@ class PagesController extends Controller
                 'amount'       => $value,
                 'price'        => $price,
             ];
+
         }
 
         $account->tax_id       = $request->tax_id;
@@ -266,6 +331,18 @@ class PagesController extends Controller
         session()->forget( 'cart' );
 
         return redirect()->route( 'user.billing-info', $billing->id )->with( 'success', 'ดำเนินการเสร็จสิ้นกรุณาแจ้งชำระเงิน' );
+
+    }
+
+    public function search_product( Request $request )
+    {
+        if ( $request->data === null )
+        {
+            return redirect()->route( 'product' );
+        }
+        $product = Product::where( 'product_name', 'like', '%' . $request->data . '%' )->paginate( 36 );
+
+        return view( 'pages.product', compact( 'product' ) );
 
     }
 

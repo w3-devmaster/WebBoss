@@ -55,7 +55,6 @@
                                 $amount += $item['amount'];
                                 $total += $item['amount'] * $price;
                                 $iteration = $loop->iteration;
-                                $vat = $total * 0.07;
                             @endphp
                         @endforeach
                     </tbody>
@@ -64,11 +63,61 @@
                             <tr>
                                 <td class="text-start" colspan="2"></td>
                                 <td class="align-middle"></td>
-                                <td class="text-end align-middle"><strong>ราคารวม</strong></td>
+                                <td class="text-end align-middle">รวม</td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total, 2) }} ฿</strong>
+                                    {{ number_format($total, 2) }} ฿
                                 </td>
                             </tr>
+                            @if ($billing->discount == 0)
+                                @php
+                                    $net = $total;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 1)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($billing->dis_price, 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $billing->dis_price;
+                                @endphp
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">รวมทั้งสิ้น</td>
+                                    <td class="align-middle">
+                                        {{ number_format($net, 2) }} ฿
+                                    </td>
+                                </tr>
+                            @endif
+                            @if ($billing->discount == 2)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด ({{ $billing->dis_price }}%)</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($total * ($billing->dis_price / 100), 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $total * ($billing->dis_price / 100);
+                                @endphp
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">รวมทั้งสิ้น</td>
+                                    <td class="align-middle">
+                                        {{ number_format($net, 2) }} ฿
+                                    </td>
+                                </tr>
+                            @endif
+                            @php
+                                $vat = $net * 0.07;
+                            @endphp
                             <tr>
                                 <td class="text-start" colspan="2"></td>
                                 <td class="align-middle"></td>
@@ -82,16 +131,58 @@
                                 <td class="align-middle"></td>
                                 <td class="text-end align-middle"><strong>ราคาสุทธิ</strong></td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total + $vat, 2) }} ฿</strong>
+                                    @php
+                                        $net = $net + $vat;
+                                    @endphp
+                                    <strong>{{ number_format($net, 2) }} ฿</strong>
                                 </td>
                             </tr>
                         @elseif($billing->mode == 1)
+                            <tr>
+                                <td class="text-start" colspan="2"></td>
+                                <td class="align-middle"></td>
+                                <td class="text-end align-middle">รวม</td>
+                                <td class="align-middle">
+                                    {{ number_format($total, 2) }} ฿
+                                </td>
+                            </tr>
+                            @if ($billing->discount == 0)
+                                @php
+                                    $net = $total;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 1)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($billing->dis_price, 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $billing->dis_price;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 2)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด ({{ $billing->dis_price }}%)</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($total * ($billing->dis_price / 100), 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $total * ($billing->dis_price / 100);
+                                @endphp
+                            @endif
                             <tr class="table-success">
                                 <td class="text-start" colspan="2"><strong>รวม {{ $iteration }} รายการ</strong></td>
                                 <td class="align-middle"></td>
                                 <td class="text-end align-middle"><strong>ราคาสุทธิ</strong></td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total, 2) }} ฿</strong>
+                                    <strong>{{ number_format($net, 2) }} ฿</strong>
                                 </td>
                             </tr>
                         @endif
@@ -108,7 +199,7 @@
                 <hr class="border-top border-dark">
                 @if ($billing->payment === null)
                     <h5>แจ้งชำระเงิน</h5>
-                    <div class="alert alert-dark">กรุณาชำระเงินจำนวน {{ number_format($billing->price, 2) }} บาท มาที่หมายเลขบัญชีด้านล่างและอัปโหลดหลักฐานการชำระเงิน</div>
+                    <div class="alert alert-dark">กรุณาชำระเงินจำนวน {{ number_format($net, 2) }} บาท มาที่หมายเลขบัญชีด้านล่างและอัปโหลดหลักฐานการชำระเงิน</div>
                     {!! Form::open(['route' => 'user.payment', 'files' => true]) !!}
                     {!! Form::hidden('id', $billing->id) !!}
                     <div class="input-group">

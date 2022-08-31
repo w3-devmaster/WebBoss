@@ -172,7 +172,9 @@
                     <div class="col-12">
                         <div class="form-group mb-3">
                             <label for="product_details">รายละเอียดสินค้า</label>
-                            <textarea name="product_details"></textarea>
+                            <textarea name="product_details">
+                                {{ old('product_details') ?? '' }}
+                            </textarea>
                             <span class="text-danger">
                                 @error('product_details')
                                     {{ $message }}

@@ -63,7 +63,6 @@
                                 $amount += $item['amount'];
                                 $total += $item['amount'] * $price;
                                 $iteration = $loop->iteration;
-                                $vat = $total * 0.07;
                             @endphp
                         @endforeach
                     </tbody>
@@ -72,11 +71,61 @@
                             <tr>
                                 <td class="text-start" colspan="2"></td>
                                 <td class="align-middle"></td>
-                                <td class="text-end align-middle"><strong>ราคารวม</strong></td>
+                                <td class="text-end align-middle">รวม</td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total, 2) }} ฿</strong>
+                                    {{ number_format($total, 2) }} ฿
                                 </td>
                             </tr>
+                            @if ($billing->discount == 0)
+                                @php
+                                    $net = $total;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 1)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($billing->dis_price, 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $billing->dis_price;
+                                @endphp
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">รวมทั้งสิ้น</td>
+                                    <td class="align-middle">
+                                        {{ number_format($net, 2) }} ฿
+                                    </td>
+                                </tr>
+                            @endif
+                            @if ($billing->discount == 2)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด ({{ $billing->dis_price }}%)</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($total * ($billing->dis_price / 100), 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $total * ($billing->dis_price / 100);
+                                @endphp
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">รวม</td>
+                                    <td class="align-middle">
+                                        {{ number_format($net, 2) }} ฿
+                                    </td>
+                                </tr>
+                            @endif
+                            @php
+                                $vat = $net * 0.07;
+                            @endphp
                             <tr>
                                 <td class="text-start" colspan="2"></td>
                                 <td class="align-middle"></td>
@@ -90,16 +139,58 @@
                                 <td class="align-middle"></td>
                                 <td class="text-end align-middle"><strong>ราคาสุทธิ</strong></td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total + $vat, 2) }} ฿</strong>
+                                    @php
+                                        $net = $net + $vat;
+                                    @endphp
+                                    <strong>{{ number_format($net, 2) }} ฿</strong>
                                 </td>
                             </tr>
                         @elseif($billing->mode == 1)
+                            <tr>
+                                <td class="text-start" colspan="2"></td>
+                                <td class="align-middle"></td>
+                                <td class="text-end align-middle">รวม</td>
+                                <td class="align-middle">
+                                    {{ number_format($total, 2) }} ฿
+                                </td>
+                            </tr>
+                            @if ($billing->discount == 0)
+                                @php
+                                    $net = $total;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 1)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($billing->dis_price, 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $billing->dis_price;
+                                @endphp
+                            @endif
+                            @if ($billing->discount == 2)
+                                <tr>
+                                    <td class="text-start" colspan="2"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="text-end align-middle">ส่วนลด ({{ $billing->dis_price }}%)</td>
+                                    <td class="text-danger align-middle">
+                                        - {{ number_format($total * ($billing->dis_price / 100), 2) }} ฿
+                                    </td>
+                                </tr>
+                                @php
+                                    $net = $total - $total * ($billing->dis_price / 100);
+                                @endphp
+                            @endif
                             <tr class="table-success">
                                 <td class="text-start" colspan="2"><strong>รวม {{ $iteration }} รายการ</strong></td>
                                 <td class="align-middle"></td>
                                 <td class="text-end align-middle"><strong>ราคาสุทธิ</strong></td>
                                 <td class="align-middle">
-                                    <strong>{{ number_format($total, 2) }} ฿</strong>
+                                    <strong>{{ number_format($net, 2) }} ฿</strong>
                                 </td>
                             </tr>
                         @endif
@@ -150,25 +241,54 @@
                     {!! Form::submit('ส่งข้อมูล', ['class' => 'btn btn-success']) !!}
                     {!! Form::close() !!}
                 @else
-                    <h5>หลักฐานการชำระเงิน</h5>
-                    <img class="img-thumbnail w-100 d-block mx-auto" style="max-width:500px;" src="{{ Storage::url($billing->payment) }}" alt="">
-                    <hr class="border-top border-dark">
-                    <h5>ดำเนินการปรับปรุงคำสั่งซื้อ</h5>
-                    {!! Form::open(['route' => ['admin.update-order', $billing->id]]) !!}
-                    <div class="form-group mb-3">
-                        <label for="bill_status">ปรับปรุงสถานะ</label>
-                        <select name="bill_status" id="bill_status" class="form-select @error('bill_status') is-invalid @enderror">
-                            <option value="2">ชำระเงินแล้ว</option>
-                            <option value="3">ยกเลิกการชำระเงิน</option>
-                        </select>
-                        <span class="text-danger">
-                            @error('bill_status')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
-                    {!! Form::submit('ส่งข้อมูล', ['class' => 'btn btn-success']) !!}
-                    {!! Form::close() !!}
+                    @if ($billing->bill_status == 0 && $billing->order_status == 0)
+                        <h5 class="mt-2">ดำเนินการปรับปรุงคำสั่งซื้อ</h5>
+                        {!! Form::open(['route' => ['admin.update-discount', $billing->id]]) !!}
+                        <div class="form-group mb-3">
+                            <label for="discount">สถานะการขาย</label>
+                            <select name="discount" id="discount" class="form-select @error('discount') is-invalid @enderror">
+                                @foreach (getDiscountMode() as $key => $item)
+                                    <option @if ($billing->discount == $key) selected @endif value="{{ $key }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger">
+                                @error('discount')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="dis_price">จำนวนลดราคา</label>
+                            <input name="dis_price" type="number" class="form-control @error('dis_price') is-invalid @enderror" value="{{ $billing->dis_price }}" step="0.01" min="0">
+                            <span class="text-danger">
+                                @error('dis_price')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                        {!! Form::submit('ส่งข้อมูล', ['class' => 'btn btn-success']) !!}
+                        {!! Form::close() !!}
+                    @else
+                        <h5 class="mt-2">หลักฐานการชำระเงิน</h5>
+                        <img class="img-thumbnail w-100 d-block mx-auto" style="max-width:500px;" src="{{ Storage::url($billing->payment) }}" alt="">
+                        <hr class="border-top border-dark">
+                        <h5>ดำเนินการปรับปรุงคำสั่งซื้อ</h5>
+                        {!! Form::open(['route' => ['admin.update-order', $billing->id]]) !!}
+                        <div class="form-group mb-3">
+                            <label for="bill_status">ปรับปรุงสถานะ</label>
+                            <select name="bill_status" id="bill_status" class="form-select @error('bill_status') is-invalid @enderror">
+                                <option value="2">ชำระเงินแล้ว</option>
+                                <option value="3">ยกเลิกการชำระเงิน</option>
+                            </select>
+                            <span class="text-danger">
+                                @error('bill_status')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                        {!! Form::submit('ส่งข้อมูล', ['class' => 'btn btn-success']) !!}
+                        {!! Form::close() !!}
+                    @endif
                 @endif
                 <hr class="border-top border-dark">
             </div>

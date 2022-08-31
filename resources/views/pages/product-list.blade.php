@@ -68,6 +68,7 @@
                     @endif
                 </p>
                 @if ($product->amount > 0)
+                    <input id="amount_{{ $product->id }}" class="form-control form-control-sm d-inline" type="number" min="1" max="{{ $product->amount }}" style="width:80px;" value="1">
                     <button class="btn btn-danger text-light buy-product" data-productId="{{ $product->id }}">
                         <i class="fa fa-cash-register"></i>
                         ซื้อเลย
@@ -83,6 +84,8 @@
                     </button>
                 @endif
                 <br><br>
+                <span class="text-secondary">In Stock : {{ number_format($product->amount) }}</span>
+                <br>
                 <span class="text-secondary">ขายแล้ว : {{ number_format($product->buy) }}</span>
 
                 <span class="text-secondary position-absolute" style="bottom:0;right:30px;">เข้าชม : {{ number_format($product->view) }}</span>

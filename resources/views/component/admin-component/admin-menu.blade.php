@@ -21,6 +21,9 @@
             <ion-icon name="key-outline" class="me-1"></ion-icon>เปลี่ยนรหัสผ่าน
         </a>
         <hr class="dropdown-divider">
+        <a class="dropdown-item text-warning" href="{{ route('admin.test') }}">
+            <ion-icon name="analytics-outline" class="me-1"></ion-icon>ข้อมูลทดสอบระบบ
+        </a>
         <a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
             <ion-icon name="log-out-outline" class="me-1"></ion-icon></i>{{ __('ออกจากระบบ') }}

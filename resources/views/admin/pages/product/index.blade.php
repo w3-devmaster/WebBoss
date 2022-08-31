@@ -26,10 +26,10 @@
                     </thead>
                     <tbody class="f-14">
                         @foreach ($product as $key => $item)
-                            <tr>
-                                <td class="align-middle"><a class="text-decoration-none" href="{{ route('admin.product.show', $item->id) }}">{{ $item->code }}</a></td>
+                            <tr style="height:130px;">
+                                <td class="align-middle"><a class="text-decoration-none" href="{{ route('admin.product.show', $item->id) }}">#{{ $item->code }}</a></td>
                                 <td width="40%" class="align-middle">
-                                    <img class="img-thumbnail me-3" style="width:60px;" src="{{ Storage::url($item->image) }}" alt="">{{ $item->product_name }}
+                                    <img class="img-thumbnail me-3" style="height:100px;" src="{{ Storage::url($item->image) }}" alt="">{{ $item->product_name }}
                                 </td>
                                 <td class="align-middle">{!! Str::replace('>>', '<br><i class="fa fa-caret-right ms-2"></i>', getParentForSelect($item->category)) !!}</td>
                                 <td class="align-middle">{{ $item->color }}</td>
@@ -72,7 +72,7 @@
     <script>
         $(document).ready(function() {
             $('#productTable').DataTable({
-                iDisplayLength: 25,
+                iDisplayLength: 10,
                 language: {
                     lengthMenu: 'แสดง _MENU_ รายการต่อหน้า',
                     zeroRecords: 'ขออภัย ไม่พบข้อมูล',

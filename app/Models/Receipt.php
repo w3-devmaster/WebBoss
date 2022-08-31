@@ -17,5 +17,7 @@ class Receipt extends Model
         'customer',
         'send_address',
         'product',
+        'discount',
+        'dis_price',
     ];
 }

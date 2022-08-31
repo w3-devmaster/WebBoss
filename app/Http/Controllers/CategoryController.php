@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -163,7 +164,11 @@ class CategoryController extends Controller
      */
     public function destroy( Category $category )
     {
-        Storage::delete( $category->img );
+        if ( $category->img != 'public/default-images/stationery.png' )
+        {
+            Storage::delete( $category->img );
+        }
+        Product::where( 'category', $category->id )->update( ['category' => 0] );
         $category->delete();
 
         return redirect()->route( 'admin.category.index' )->with( 'success', 'ลบข้อมูลเสร็จสิ้น' );

@@ -50,7 +50,7 @@
                     @if (count($slide_bl) > 0)
                         @foreach ($slide_bl as $item)
                             <div class="carousel-item @if ($loop->first) active @endif">
-                                <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                                <img src="{{ Storage::url($item->image) }}" class="d-block w-100" alt="...">
                             </div>
                         @endforeach
                     @else
@@ -73,7 +73,7 @@
                     @if (count($slide_br) > 0)
                         @foreach ($slide_br as $item)
                             <div class="carousel-item @if ($loop->first) active @endif">
-                                <img src="https://placehold.jp/80c8ff/ffffff/600x150.png" class="d-block w-100" alt="...">
+                                <img src="{{ Storage::url($item->image) }}" class="d-block w-100" alt="...">
                             </div>
                         @endforeach
                     @else

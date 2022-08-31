@@ -41,6 +41,7 @@ Route::get( '/category/{id}/{order}/{asc}', [PagesController::class, 'category']
 
 Route::post( '/register-payment', [PagesController::class, 'register_payment'] )->name( 'register-payment' );
 Route::post( '/login-payment', [PagesController::class, 'login_payment'] )->name( 'login-payment' );
+Route::post( '/search-product', [PagesController::class, 'search_product'] )->name( 'search-product' );
 
 Route::view( '/how-to-buy', 'pages.how-to-buy' )->name( 'how-to-buy' );
 Route::view( '/how-to-payment', 'pages.how-to-payment' )->name( 'how-to-payment' );
@@ -97,6 +98,7 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::get( '/order-success', [AdminController::class, 'order_success'] )->name( 'order-success' );
         Route::get( '/order/{order}', [AdminController::class, 'order_view'] )->name( 'order' );
         Route::post( '/update-order/{order}', [AdminController::class, 'update_order'] )->name( 'update-order' );
+        Route::post( '/update-discount/{order}', [AdminController::class, 'update_discount'] )->name( 'update-discount' );
         Route::post( '/update-send/{order}', [AdminController::class, 'update_send'] )->name( 'update-send' );
 
         Route::get( '/receipt/{id}', [PDFController::class, 'receipt'] )->name( 'receipt' );
@@ -106,7 +108,9 @@ Route::prefix( 'admin' )->name( 'admin.' )->group( function ()
         Route::middleware( 'IsOwner' )->group( function ()
         {
             Route::resource( '/manage', ManageController::class, ['name' => 'manage'] );
-
+            Route::view( '/test', 'admin.pages.test' )->name( 'test' );
+            Route::post( '/test', [AdminController::class, 'create_test_data'] )->name( 'test-create' );
+            Route::post( '/reset', [AdminController::class, 'reset_data'] )->name( 'reset' );
         } );
 
         Route::prefix( 'setting' )->name( 'setting.' )->group( function ()

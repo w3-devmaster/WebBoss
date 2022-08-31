@@ -39,9 +39,14 @@ if ( !function_exists( 'getParentForSelect' ) )
 {
     function getParentForSelect( $id )
     {
-        if ( $id === null || $id === 0 )
+        if ( $id == null )
         {
             return 'หมวดหมู่หลัก';
+        }
+
+        if ( $id == 0 )
+        {
+            return '-';
         }
 
         $name = '';

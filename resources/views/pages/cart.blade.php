@@ -34,7 +34,7 @@
                                 <td class="align-middle"><input style="width: 80px;" data-productId="{{ $key }}" class="edit-amount form-control form-control-sm mx-auto" type="number" value="{{ $item }}" min="0" step="1"></td>
                                 <td class="align-middle">
                                     <span class="{{ $product->discount > 0 ? 'text-dark' : 'text-success' }}" style="{{ $product->discount > 0 ? 'text-decoration: line-through rgb(255, 100, 100);;' : '' }}">{{ number_format($product->price, 2) }} ฿</span><br>
-                                    @if ($product->discount === 0)
+                                    @if ($product->discount == 0)
                                         @php
                                             $price = $product->price;
                                         @endphp

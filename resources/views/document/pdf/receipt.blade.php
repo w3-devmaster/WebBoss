@@ -10,11 +10,11 @@
     @endphp
     <div class="wrapper-page">
         <div class="logo2">
-            {{-- <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url(system_config()->logo)))) }}"> --}}
-            <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png">
+            <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url('public/default-images/logo4x4.png')))) }}">
+            {{-- <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png"> --}}
         </div>
         <div class="head-text" style="padding-left:30px;">
-            <h1 class="my-0">{{ $config->company_name }}</h1>
+            <h1 style="line-height: 25px;" class="my-0">{{ $config->company_name }}</h1>
             <h3 class="my-0">{{ $config->address }} โทร. {{ $config->phone }}</h3>
             <h3 class="my-0">เลขประจำตัวผู้เสียภาษี {{ $config->tax_id }}</h3>
         </div>
@@ -75,35 +75,120 @@
                     @endphp
                 @endforeach
             </tbody>
-            <tbody>
+            <tbody class="f-16">
                 @if ($receipt->mode == 2)
                     <tr>
                         <td colspan="3"></td>
-                        <td style="padding-left:5px;"><b>ราคารวม</b></td>
+                        <td style="padding-left:5px;">รวม</td>
                         <td class="text-center">
-                            <b>{{ number_format($total, 2) }}</b>
+                            {{ number_format($total, 2) }}
                         </td>
                     </tr>
+                    @if ($receipt->discount == 0)
+                        @php
+                            $net = $total;
+                        @endphp
+                    @endif
+                    @if ($receipt->discount == 1)
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">ส่วนลด</td>
+                            <td class="text-center">
+                                - {{ number_format($receipt->dis_price, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                            $net = $total - $receipt->dis_price;
+                        @endphp
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">รวมทั้งสิ้น</td>
+                            <td class="text-center">
+                                {{ number_format($net, 2) }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if ($receipt->discount == 2)
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                            <td class="text-center">
+                                - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                            </td>
+                        </tr>
+                        @php
+                            $net = $total - $total * ($receipt->dis_price / 100);
+                        @endphp
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">รวมรวมทั้งสิ้น</td>
+                            <td class="text-center">
+                                {{ number_format($net, 2) }}
+                            </td>
+                        </tr>
+                    @endif
+                    @php
+                        $vat = $net * 0.07;
+                    @endphp
                     <tr>
                         <td colspan="3"></td>
-                        <td style="padding-left:5px;"><b>ภาษีมูลค่าเพิ่ม (+7%)</b></td>
+                        <td style="padding-left:5px;"><strong>ภาษีมูลค่าเพิ่ม (+7%)</strong></td>
                         <td class="text-center">
-                            <b>{{ number_format($vat, 2) }}</b>
+                            {{ number_format($vat, 2) }}
                         </td>
                     </tr>
+                    @php
+                        $net = $net + $vat;
+                    @endphp
                     <tr>
                         <td class="text-center"><b>ราคาสุทธิ</b></td>
-                        <td colspan="3" class="text-center"><b>( {{ m2t($total + $vat) }} )</b></td>
+                        <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
                         <td class="text-center">
-                            <b>{{ number_format($total + $vat, 2) }}</b>
+                            <b>{{ number_format($net, 2) }}</b>
                         </td>
                     </tr>
                 @elseif($receipt->mode == 1)
                     <tr>
-                        <td class="text-center"><b>ราคาสุทธิ</b></td>
-                        <td colspan="3" class="text-center"><b>( {{ m2t($total) }} )</b></td>
+                        <td colspan="3"></td>
+                        <td style="padding-left:5px;">รวม</td>
                         <td class="text-center">
-                            <b>{{ number_format($total, 2) }}</b>
+                            {{ number_format($total, 2) }}
+                        </td>
+                    </tr>
+                    @if ($receipt->discount == 0)
+                        @php
+                            $net = $total;
+                        @endphp
+                    @endif
+                    @if ($receipt->discount == 1)
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">ส่วนลด</td>
+                            <td class="text-center">
+                                - {{ number_format($receipt->dis_price, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                            $net = $total - $receipt->dis_price;
+                        @endphp
+                    @endif
+                    @if ($receipt->discount == 2)
+                        <tr>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                            <td class="text-center">
+                                - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                            </td>
+                        </tr>
+                        @php
+                            $net = $total - $total * ($receipt->dis_price / 100);
+                        @endphp
+                    @endif
+                    <tr class="table-success">
+                        <td class="text-center"><b>ราคาสุทธิ</b></td>
+                        <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
+                        <td class="text-center">
+                            <b>{{ number_format($net, 2) }}</b>
                         </td>
                     </tr>
                 @endif
@@ -124,11 +209,11 @@
     @if ($receipt->mode == 1)
         <div class="wrapper-page">
             <div class="logo2">
-                {{-- <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url(system_config()->logo)))) }}"> --}}
-                <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png">
+                <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url('public/default-images/logo4x4.png')))) }}">
+                {{-- <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png"> --}}
             </div>
             <div class="head-text" style="padding-left:30px;">
-                <h1 class="my-0">{{ $config->company_name }}</h1>
+                <h1 style="line-height: 25px;" class="my-0">{{ $config->company_name }}</h1>
                 <h3 class="my-0">{{ $config->address }} โทร. {{ $config->phone }}</h3>
                 <h3 class="my-0">เลขประจำตัวผู้เสียภาษี {{ $config->tax_id }}</h3>
             </div>
@@ -145,8 +230,7 @@
                 <thead>
                     <tr>
                         <td colspan="5">
-                            <div style="width: 20%;float:right;">
-                                <b>
+                            <div style="width: 20%;float:right;"><b>
                                     เลขที่ : {{ $receipt->code }} <br>
                                     วันที่ : {{ thai_date_short(strtotime($receipt->created_at)) }} <br>
                                     อ้างอิง : {{ getBilling($receipt->billing)->code }}
@@ -190,35 +274,120 @@
                         @endphp
                     @endforeach
                 </tbody>
-                <tbody>
+                <tbody class="f-16">
                     @if ($receipt->mode == 2)
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ราคารวม</b></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
                             </td>
                         </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมรวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @php
+                            $vat = $net * 0.07;
+                        @endphp
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ภาษีมูลค่าเพิ่ม (+7%)</b></td>
+                            <td style="padding-left:5px;"><strong>ภาษีมูลค่าเพิ่ม (+7%)</strong></td>
                             <td class="text-center">
-                                <b>{{ number_format($vat, 2) }}</b>
+                                {{ number_format($vat, 2) }}
                             </td>
                         </tr>
+                        @php
+                            $net = $net + $vat;
+                        @endphp
                         <tr>
                             <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total + $vat) }} )</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
                             <td class="text-center">
-                                <b>{{ number_format($total + $vat, 2) }}</b>
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @elseif($receipt->mode == 1)
                         <tr>
-                            <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total) }} )</b></td>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
+                            </td>
+                        </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                        @endif
+                        <tr class="table-success">
+                            <td class="text-center"><b>ราคาสุทธิ</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
+                            <td class="text-center">
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @endif
@@ -240,11 +409,11 @@
     @if ($receipt->mode == 2)
         <div class="wrapper-page">
             <div class="logo2">
-                {{-- <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url(system_config()->logo)))) }}"> --}}
-                <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png">
+                <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url('public/default-images/logo4x4.png')))) }}">
+                {{-- <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png"> --}}
             </div>
             <div class="head-text" style="padding-left:30px;">
-                <h1 class="my-0">{{ $config->company_name }}</h1>
+                <h1 style="line-height: 25px;" class="my-0">{{ $config->company_name }}</h1>
                 <h3 class="my-0">{{ $config->address }} โทร. {{ $config->phone }}</h3>
                 <h3 class="my-0">เลขประจำตัวผู้เสียภาษี {{ $config->tax_id }}</h3>
             </div>
@@ -261,8 +430,7 @@
                 <thead>
                     <tr>
                         <td colspan="5">
-                            <div style="width: 20%;float:right;">
-                                <b>
+                            <div style="width: 20%;float:right;"><b>
                                     เลขที่ : {{ $receipt->code }} <br>
                                     วันที่ : {{ thai_date_short(strtotime($receipt->created_at)) }} <br>
                                     อ้างอิง : {{ getBilling($receipt->billing)->code }}
@@ -306,35 +474,120 @@
                         @endphp
                     @endforeach
                 </tbody>
-                <tbody>
+                <tbody class="f-16">
                     @if ($receipt->mode == 2)
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ราคารวม</b></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
                             </td>
                         </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมรวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @php
+                            $vat = $net * 0.07;
+                        @endphp
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ภาษีมูลค่าเพิ่ม (+7%)</b></td>
+                            <td style="padding-left:5px;"><strong>ภาษีมูลค่าเพิ่ม (+7%)</strong></td>
                             <td class="text-center">
-                                <b>{{ number_format($vat, 2) }}</b>
+                                {{ number_format($vat, 2) }}
                             </td>
                         </tr>
+                        @php
+                            $net = $net + $vat;
+                        @endphp
                         <tr>
                             <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total + $vat) }} )</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
                             <td class="text-center">
-                                <b>{{ number_format($total + $vat, 2) }}</b>
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @elseif($receipt->mode == 1)
                         <tr>
-                            <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total) }} )</b></td>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
+                            </td>
+                        </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                        @endif
+                        <tr class="table-success">
+                            <td class="text-center"><b>ราคาสุทธิ</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
+                            <td class="text-center">
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @endif
@@ -354,11 +607,11 @@
         </div>
         <div class="wrapper-page">
             <div class="logo2">
-                {{-- <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url(system_config()->logo)))) }}"> --}}
-                <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png">
+                <img class="head-logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path(Storage::url('public/default-images/logo4x4.png')))) }}">
+                {{-- <img class="head-logo" src="https://placehold.jp/3d4070/ffffff/150x150.png"> --}}
             </div>
             <div class="head-text" style="padding-left:30px;">
-                <h1 class="my-0">{{ $config->company_name }}</h1>
+                <h1 style="line-height: 25px;" class="my-0">{{ $config->company_name }}</h1>
                 <h3 class="my-0">{{ $config->address }} โทร. {{ $config->phone }}</h3>
                 <h3 class="my-0">เลขประจำตัวผู้เสียภาษี {{ $config->tax_id }}</h3>
             </div>
@@ -375,8 +628,7 @@
                 <thead>
                     <tr>
                         <td colspan="5">
-                            <div style="width: 20%;float:right;">
-                                <b>
+                            <div style="width: 20%;float:right;"><b>
                                     เลขที่ : {{ $receipt->code }} <br>
                                     วันที่ : {{ thai_date_short(strtotime($receipt->created_at)) }} <br>
                                     อ้างอิง : {{ getBilling($receipt->billing)->code }}
@@ -420,35 +672,120 @@
                         @endphp
                     @endforeach
                 </tbody>
-                <tbody>
+                <tbody class="f-16">
                     @if ($receipt->mode == 2)
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ราคารวม</b></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
                             </td>
                         </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">รวมรวมทั้งสิ้น</td>
+                                <td class="text-center">
+                                    {{ number_format($net, 2) }}
+                                </td>
+                            </tr>
+                        @endif
+                        @php
+                            $vat = $net * 0.07;
+                        @endphp
                         <tr>
                             <td colspan="3"></td>
-                            <td style="padding-left:5px;"><b>ภาษีมูลค่าเพิ่ม (+7%)</b></td>
+                            <td style="padding-left:5px;"><strong>ภาษีมูลค่าเพิ่ม (+7%)</strong></td>
                             <td class="text-center">
-                                <b>{{ number_format($vat, 2) }}</b>
+                                {{ number_format($vat, 2) }}
                             </td>
                         </tr>
+                        @php
+                            $net = $net + $vat;
+                        @endphp
                         <tr>
                             <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total + $vat) }} )</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
                             <td class="text-center">
-                                <b>{{ number_format($total + $vat, 2) }}</b>
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @elseif($receipt->mode == 1)
                         <tr>
-                            <td class="text-center"><b>ราคาสุทธิ</b></td>
-                            <td colspan="3" class="text-center"><b>( {{ m2t($total) }} )</b></td>
+                            <td colspan="3"></td>
+                            <td style="padding-left:5px;">รวม</td>
                             <td class="text-center">
-                                <b>{{ number_format($total, 2) }}</b>
+                                {{ number_format($total, 2) }}
+                            </td>
+                        </tr>
+                        @if ($receipt->discount == 0)
+                            @php
+                                $net = $total;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 1)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด</td>
+                                <td class="text-center">
+                                    - {{ number_format($receipt->dis_price, 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $receipt->dis_price;
+                            @endphp
+                        @endif
+                        @if ($receipt->discount == 2)
+                            <tr>
+                                <td colspan="3"></td>
+                                <td style="padding-left:5px;">ส่วนลด ({{ $receipt->dis_price }}%)</td>
+                                <td class="text-center">
+                                    - {{ number_format($total * ($receipt->dis_price / 100), 2) }}
+                                </td>
+                            </tr>
+                            @php
+                                $net = $total - $total * ($receipt->dis_price / 100);
+                            @endphp
+                        @endif
+                        <tr class="table-success">
+                            <td class="text-center"><b>ราคาสุทธิ</b></td>
+                            <td colspan="3" class="text-center"><b>( {{ m2t($net) }} )</b></td>
+                            <td class="text-center">
+                                <b>{{ number_format($net, 2) }}</b>
                             </td>
                         </tr>
                     @endif

@@ -19,6 +19,19 @@
     </div>
 </nav>
 @if (!request()->routeIs('admin.*'))
+    <div id="btn-cart" style="right: 50px; top:25px;z-index:2000;display:none;cursor: pointer;" class="position-fixed" onclick="window.location.href='{{ route('cart') }}'">
+        @if (!empty(session('cart')))
+            <span class="cart position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0">
+                {{ count(session('cart')) }}
+            </span>
+        @else
+            <span class="cart position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0"></span>
+        @endif
+        <ion-icon name="cart" class="text-primary f-48" style="text-shadow: 1px 1px 1px #000;"></ion-icon>
+    </div>
+@endif
+
+@if (!request()->routeIs('admin.*'))
     <nav class="navbar navbar-expand-lg navbar-light bg-info my-shadow">
         <div class="container-lg">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
